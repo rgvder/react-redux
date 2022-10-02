@@ -1,0 +1,25 @@
+@import '../styles/base/constants';
+
+.heading {
+  @include font(normal, 400, 3rem, 150%);
+  color: $color-basic;
+
+  @media (max-width: 922px) {
+    font-size: 2rem;
+  }
+
+}
+
+.text {
+  @include font(normal, 400, 2rem, 150%);
+  color: $color-basic;
+
+  @media (max-width: 922px) {
+    font-size: 1.6rem;
+  }
+
+}
+
+.link {
+  color: $color-brand;
+}

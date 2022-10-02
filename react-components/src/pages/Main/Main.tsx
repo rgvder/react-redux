@@ -1,16 +1,18 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
+import SearchBar from '../../components/main/SearchBar/SearchBar';
+import Catalog from '../../components/main/Catalog/Catalog';
 
-export function Main() {
-  return (
-    <>
-      <main>
-        <h2>Welcome to the homepage!</h2>
-        <p>You can do this, I believe in you.</p>
-      </main>
-      <nav>
-        <Link to="/about">About</Link>
-      </nav>
-    </>
-  );
+class Main extends Component {
+  render() {
+    return (
+      <>
+        <main>
+          <SearchBar />
+          <Catalog />
+        </main>
+      </>
+    );
+  }
 }
+
+export default Main;

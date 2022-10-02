@@ -1,16 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styles from '../../styles/TextPages.module.scss';
 
-export function NotFound() {
+export const NotFound = () => {
   return (
     <>
-      <main>
-        <h2>Sorry, page not found!</h2>
-        <p>
-          You can see our
-          <Link to="/">catalog</Link>.
-        </p>
-      </main>
+      <h2 className={styles.heading}>Sorry, page not found!</h2>
+      <p className={styles.text}>
+        To see our products go to{' '}
+        <Link className={styles.link} to="/">
+          the main page
+        </Link>
+        .
+      </p>
     </>
   );
-}
+};

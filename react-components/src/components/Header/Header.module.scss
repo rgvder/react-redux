@@ -1,0 +1,27 @@
+@import '../../styles/base/constants';
+
+.header {
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  @include font(normal, 900, 2rem, 130%);
+  color: $color-basic;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+}

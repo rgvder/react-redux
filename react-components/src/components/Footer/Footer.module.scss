@@ -1,0 +1,23 @@
+@import '../../styles/base/constants';
+
+.footer {
+  flex-shrink: 0;
+}
+
+.wrapper {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link {
+  display: block;
+}
+
+.info {
+  display: flex;
+  @include font(normal, 700, 1.6rem, 160%);
+  align-items: center;
+}
