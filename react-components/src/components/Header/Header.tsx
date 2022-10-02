@@ -15,7 +15,7 @@ class Header extends Component {
             <h1 className={styles.title}>Mr Пылесосов</h1>
           </div>
           <nav className={styles.nav}>
-            <NavLink className={`text`} to="/">
+            <NavLink className={`text`} to="/" end>
               Main
             </NavLink>
             <NavLink className={`text`} to="/about">

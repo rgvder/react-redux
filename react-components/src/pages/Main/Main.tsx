@@ -6,10 +6,8 @@ class Main extends Component {
   render() {
     return (
       <>
-        <main>
-          <SearchBar />
-          <Catalog />
-        </main>
+        <SearchBar />
+        <Catalog />
       </>
     );
   }

@@ -13,7 +13,15 @@ class SearchBar extends Component<Record<string, never>, { value: string }> {
       value: input.value,
     }));
 
-    localStorage.setItem('value', this.state.value);
+    localStorage.setItem('value', input.value);
+  };
+
+  removeInputValue: MouseEventHandler = () => {
+    localStorage.removeItem('value');
+
+    this.setState(() => ({
+      value: '',
+    }));
   };
 
   render() {
@@ -25,9 +33,10 @@ class SearchBar extends Component<Record<string, never>, { value: string }> {
           type="text"
           placeholder="Search..."
           autoComplete="off"
+          value={this.state.value}
           autoFocus
         />
-        <button className={styles.button} type="button">
+        <button className={styles.button} type="button" onClick={this.removeInputValue}>
           <svg
             className={styles.icon}
             width="14"
