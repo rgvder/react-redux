@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import SearchBar from './SearchBar';
 
 describe('SearchBar', () => {
@@ -18,6 +18,7 @@ describe('SearchBar', () => {
     const input = screen.queryByPlaceholderText(/Search/i);
 
     fireEvent.change(input, { target: { value: 'test' } });
+    cleanup();
 
     expect(window.localStorage.setItem).toHaveBeenCalledTimes(1);
     expect(window.localStorage.setItem).toHaveBeenCalledWith('value', 'test');

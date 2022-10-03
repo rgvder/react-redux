@@ -6,5 +6,6 @@ describe('Card', () => {
     render(<Card />);
     expect(screen.getByText(/Brand/i)).toBeInTheDocument();
     expect(screen.getByRole('img')).toBeInTheDocument();
+    expect(screen.getAllByRole('button')).toHaveLength(2);
   });
 });
