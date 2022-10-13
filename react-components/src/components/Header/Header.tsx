@@ -18,6 +18,9 @@ class Header extends Component {
             <NavLink className={`text`} to="/" end>
               Main
             </NavLink>
+            <NavLink className={`text`} to="/form">
+              Proposals
+            </NavLink>
             <NavLink className={`text`} to="/about">
               About us
             </NavLink>

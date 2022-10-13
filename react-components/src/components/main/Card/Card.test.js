@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { Card } from './Card';
 
 describe('Card', () => {
-  it('renders Card component', () => {
+  it('renders InfoCard component', () => {
     render(<Card />);
     expect(screen.getByText(/Brand/i)).toBeInTheDocument();
     expect(screen.getByRole('img')).toBeInTheDocument();
