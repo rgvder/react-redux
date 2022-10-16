@@ -33,14 +33,17 @@ class Form extends Component<FormProps, FormState> {
     this.deliverySelect = React.createRef();
 
     this.state = {
-      name: true,
-      dateOfBirth: true,
-      email: true,
-      color: true,
-      price: true,
-      suctionPower: true,
-      cleaningType: true,
-      image: true,
+      form: {
+        name: true,
+        dateOfBirth: true,
+        email: true,
+        color: true,
+        price: true,
+        suctionPower: true,
+        cleaningType: true,
+        image: true,
+      },
+      alert: false,
     };
   }
 
@@ -79,7 +82,8 @@ class Form extends Component<FormProps, FormState> {
     ].some(Boolean);
 
     if (this.submitInput?.current) {
-      this.submitInput.current.disabled = !hasInputValues || !Object.values(state).every(Boolean);
+      this.submitInput.current.disabled =
+        !hasInputValues || !Object.values(state.form).every(Boolean);
     }
   }
 
@@ -119,20 +123,23 @@ class Form extends Component<FormProps, FormState> {
 
   validate() {
     const currentState: FormState = {
-      name: this.isInputValid(this.nameInput, 2),
-      dateOfBirth: this.isInputValid(this.dateInput),
-      email: this.isInputValid(this.emailInput, 4) && this.isEmailValid(this.emailInput),
-      price: this.isInputValid(this.priceInput),
-      color: this.isFieldSetValid(this.selectColors()),
-      suctionPower: this.isInputValid(this.suctionPowerInput),
-      cleaningType: this.isFieldSetValid(this.selectCleaningType()),
-      image: !!this.addImage(this.imageInput),
+      ...this.state,
+      form: {
+        name: this.isInputValid(this.nameInput, 2),
+        dateOfBirth: this.isInputValid(this.dateInput),
+        email: this.isInputValid(this.emailInput, 4) && this.isEmailValid(this.emailInput),
+        price: this.isInputValid(this.priceInput),
+        color: this.isFieldSetValid(this.selectColors()),
+        suctionPower: this.isInputValid(this.suctionPowerInput),
+        cleaningType: this.isFieldSetValid(this.selectCleaningType()),
+        image: !!this.addImage(this.imageInput),
+      },
     };
 
     this.setState(currentState);
     this.toggleSubmit(currentState);
 
-    return Object.values(currentState).every(Boolean);
+    return Object.values(currentState.form).every(Boolean);
   }
 
   resetInputValue(input: React.RefObject<HTMLInputElement> | null) {
@@ -155,12 +162,29 @@ class Form extends Component<FormProps, FormState> {
     }
   }
 
+  showAlert() {
+    this.setState((prevState: FormState) => ({
+      ...prevState,
+      alert: true,
+    }));
+
+    setTimeout(() => {
+      this.setState((prevState: FormState) => ({
+        ...prevState,
+        alert: false,
+      }));
+    }, 3000);
+  }
+
   handleUserInput(event: ChangeEvent) {
     const name: string = (event.target as HTMLInputElement).name;
     const isColors: boolean = ['black', 'white', 'blue', 'red', 'grey'].includes(name);
     const newState: FormState = {
       ...this.state,
-      [isColors ? 'color' : name]: true,
+      form: {
+        ...this.state.form,
+        [isColors ? 'color' : name]: true,
+      },
     };
 
     this.setState(newState);
@@ -186,8 +210,8 @@ class Form extends Component<FormProps, FormState> {
     };
 
     if (this.validate()) {
-      alert('Info is saved');
       this.props.addProposal(proposal);
+      this.showAlert();
 
       this.resetInputValue(this.nameInput);
       this.resetInputValue(this.dateInput);
@@ -230,7 +254,9 @@ class Form extends Component<FormProps, FormState> {
             autoComplete="off"
           />
         </label>
-        {addErrorMes(this.state.name ? '' : `${errorText} Name must contain more than 2 letters.`)}
+        {addErrorMes(
+          this.state.form.name ? '' : `${errorText} Name must contain more than 2 letters.`
+        )}
         <label className={`${styles.label} ${styles.text}`}>
           Date of birth:
           <input
@@ -242,7 +268,7 @@ class Form extends Component<FormProps, FormState> {
             max="2004-01-01"
           />
         </label>
-        {addErrorMes(this.state.dateOfBirth ? '' : errorText)}
+        {addErrorMes(this.state.form.dateOfBirth ? '' : errorText)}
         <label className={`${styles.label} ${styles.text}`}>
           Email:
           <input
@@ -255,7 +281,9 @@ class Form extends Component<FormProps, FormState> {
           />
         </label>
         {addErrorMes(
-          this.state.email ? '' : `${errorText} The data you entered is not in the right format.`
+          this.state.form.email
+            ? ''
+            : `${errorText} The data you entered is not in the right format.`
         )}
         <label className={`${styles.label} ${styles.text}`}>
           Price limit in rub:
@@ -267,7 +295,7 @@ class Form extends Component<FormProps, FormState> {
             name="price"
           />
         </label>
-        {addErrorMes(this.state.price ? '' : errorText)}
+        {addErrorMes(this.state.form.price ? '' : errorText)}
         <label className={`${styles.label} ${styles.text}`}>
           Suction power in watts:
           <input
@@ -278,7 +306,7 @@ class Form extends Component<FormProps, FormState> {
             name="suctionPower"
           />
         </label>
-        {addErrorMes(this.state.suctionPower ? '' : errorText)}
+        {addErrorMes(this.state.form.suctionPower ? '' : errorText)}
         <fieldset ref={this.cleaningTypeInput}>
           <legend className={`${styles.legend} ${styles.text}`}>Cleaning type:</legend>
           <div className={styles.wrapper}>
@@ -302,7 +330,7 @@ class Form extends Component<FormProps, FormState> {
             </label>
           </div>
         </fieldset>
-        {addErrorMes(this.state.cleaningType ? '' : errorText)}
+        {addErrorMes(this.state.form.cleaningType ? '' : errorText)}
         <fieldset ref={this.colorInput}>
           <legend className={`${styles.legend} ${styles.text}`}>Color:</legend>
           <div className={styles.wrapper}>
@@ -328,7 +356,7 @@ class Form extends Component<FormProps, FormState> {
             </label>
           </div>
         </fieldset>
-        {addErrorMes(this.state.color ? '' : errorText)}
+        {addErrorMes(this.state.form.color ? '' : errorText)}
 
         <fieldset>
           <legend className={styles.text}>Delivery term:</legend>
@@ -350,7 +378,7 @@ class Form extends Component<FormProps, FormState> {
             name="image"
           />
         </fieldset>
-        {addErrorMes(this.state.image ? '' : errorText)}
+        {addErrorMes(this.state.form.image ? '' : errorText)}
         <input
           ref={this.submitInput}
           className="button button_filters"
@@ -358,6 +386,9 @@ class Form extends Component<FormProps, FormState> {
           type="submit"
           value="Send"
         />
+        <div className={`text ${styles.alert} ${this.state.alert ? styles.active : ''}`}>
+          Your data has been saved
+        </div>
       </form>
     );
   }

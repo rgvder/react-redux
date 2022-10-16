@@ -49,3 +49,20 @@
   height: 5px;
   color: red;
 }
+
+.alert {
+  display: none;
+}
+
+.active {
+  display: block;
+  background-color: $color-brand;
+  border: 1px solid $color-basic;
+  border-radius: 5px;
+  padding: 10px;
+  color: $color-meta;
+
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+}

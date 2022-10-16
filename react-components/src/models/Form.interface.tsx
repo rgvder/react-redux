@@ -5,12 +5,15 @@ export type FormProps = {
 };
 
 export interface FormState {
-  name: boolean;
-  dateOfBirth: boolean;
-  image: boolean;
-  email: boolean;
-  color: boolean;
-  price: boolean;
-  suctionPower: boolean;
-  cleaningType: boolean;
+  form: {
+    name: boolean;
+    dateOfBirth: boolean;
+    image: boolean;
+    email: boolean;
+    color: boolean;
+    price: boolean;
+    suctionPower: boolean;
+    cleaningType: boolean;
+  };
+  alert: boolean;
 }
