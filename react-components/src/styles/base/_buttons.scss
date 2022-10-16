@@ -9,6 +9,18 @@
   letter-spacing: 0.5px;
   padding: 2px 14px;
 
+  &:disabled {
+    cursor: auto;
+    color: $color-additional;
+    border: 1px solid $color-additional;
+
+    &:hover {
+      background-color: inherit;
+      color: $color-additional;
+      border: 1px solid $color-additional;
+    }
+  }
+
   &_basic {
     background-color: $color-brand;
     border: 1px solid $color-brand;

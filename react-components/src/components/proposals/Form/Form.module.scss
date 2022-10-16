@@ -12,7 +12,13 @@
   @include font(normal, 700, 1.6rem, 160%);
 }
 
-.input-text {
+.label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.input {
   border: 1px solid $color-additional-light;
   border-radius: 4px;
   overflow: hidden;
@@ -28,4 +34,18 @@
     border: 1px solid rgba(23, 105, 106, 0.4);
     box-shadow: 0 80px 80px -20px rgba(23, 105, 106, 0.08), 0px 30px 24px -10px rgba(23, 105, 106, 0.05), 0px 12px 10px -6px rgba(23, 105, 106, 0.04), 0px 4px 4px -4px rgba(30, 33, 44, 0.03);
   }
+}
+
+.wrapper {
+  display: flex;
+  gap: 15px;
+}
+
+.legend {
+  text-align: left;
+}
+
+.error {
+  height: 5px;
+  color: red;
 }
