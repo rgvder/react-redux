@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import styles from './Catalog.module.scss';
-import items from '../../../assets/source/items.json';
 import { Card } from '../Card/Card';
+import { Item } from '../../../models/Item.interface';
 
-class Catalog extends Component {
+class Catalog extends Component<{ items: Item[] }> {
   render() {
     return (
       <section className={styles.catalog}>
         <div>
-          {items &&
-            items.map((item) => (
+          {this.props.items &&
+            this.props.items.map((item) => (
               <Card
                 key={item.id}
                 image={item.image}

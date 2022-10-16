@@ -1,13 +1,16 @@
 import React, { ChangeEventHandler, Component, MouseEventHandler } from 'react';
 import styles from './SearchBar.module.scss';
 
-class SearchBar extends Component<Record<string, never>, { value: string }> {
-  constructor(props: Record<string, never> | Readonly<Record<string, never>>) {
+class SearchBar extends Component<{ filterItems: (query: string) => void }, { value: string }> {
+  constructor(props: { filterItems: (query: string) => void }) {
     super(props);
 
+    const savedValue: string = localStorage.getItem('value') || '';
+
     this.state = {
-      value: localStorage.getItem('value') || '',
+      value: savedValue,
     };
+    this.props.filterItems(savedValue);
   }
 
   saveValueHandler: ChangeEventHandler = (event) => {
@@ -16,6 +19,12 @@ class SearchBar extends Component<Record<string, never>, { value: string }> {
     this.setState(() => ({
       value: input.value,
     }));
+
+    this.props.filterItems(input.value);
+
+    if (!input.value) {
+      localStorage.removeItem('value');
+    }
   };
 
   removeInputValue: MouseEventHandler = () => {
@@ -24,6 +33,8 @@ class SearchBar extends Component<Record<string, never>, { value: string }> {
     this.setState(() => ({
       value: '',
     }));
+
+    this.props.filterItems('');
   };
 
   componentWillUnmount() {
