@@ -87,22 +87,16 @@ class Form extends Component<FormProps, FormState> {
     }
   }
 
-  isInputValid(input: React.RefObject<HTMLInputElement> | null, minLength = 0) {
+  isInputValid(input: React.RefObject<HTMLInputElement> | null, minLength = 0, regexp?: RegExp) {
     if (!input?.current?.value) {
       return false;
+    }
+
+    if (regexp) {
+      return input.current.value.trim().length >= minLength && regexp.test(input.current.value);
     }
 
     return input.current.value.trim().length >= minLength;
-  }
-
-  isEmailValid(input: React.RefObject<HTMLInputElement> | null) {
-    if (!input?.current?.value) {
-      return false;
-    }
-
-    return RegExp(
-      /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu
-    ).test(input?.current?.value);
   }
 
   isFieldSetValid(fieldSetInput: string[] | string | undefined) {
@@ -125,9 +119,15 @@ class Form extends Component<FormProps, FormState> {
     const currentState: FormState = {
       ...this.state,
       form: {
-        name: this.isInputValid(this.nameInput, 2),
+        name: this.isInputValid(this.nameInput, 2, RegExp(/^[a-zа-я ]+$/gim)),
         dateOfBirth: this.isInputValid(this.dateInput),
-        email: this.isInputValid(this.emailInput, 4) && this.isEmailValid(this.emailInput),
+        email: this.isInputValid(
+          this.emailInput,
+          4,
+          RegExp(
+            /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu
+          )
+        ),
         price: this.isInputValid(this.priceInput),
         color: this.isFieldSetValid(this.selectColors()),
         suctionPower: this.isInputValid(this.suctionPowerInput),
@@ -226,8 +226,9 @@ class Form extends Component<FormProps, FormState> {
       );
 
       if (this.deliverySelect?.current?.value) {
-        this.deliverySelect.current.value = 'Not mentioned';
+        this.deliverySelect.current.value = 'not mentioned';
       }
+
       if (this.submitInput?.current) {
         this.submitInput.current.disabled = true;
       }
@@ -296,6 +297,7 @@ class Form extends Component<FormProps, FormState> {
             onChange={this.handleUserInput.bind(this)}
             type="number"
             name="price"
+            min="1"
           />
         </label>
         {addErrorMes(this.state.form.price ? '' : errorText)}
@@ -307,6 +309,7 @@ class Form extends Component<FormProps, FormState> {
             onChange={this.handleUserInput.bind(this)}
             type="number"
             name="suctionPower"
+            min="1"
           />
         </label>
         {addErrorMes(this.state.form.suctionPower ? '' : errorText)}
@@ -369,11 +372,11 @@ class Form extends Component<FormProps, FormState> {
         <fieldset>
           <legend className={styles.text}>Delivery term:</legend>
           <select ref={this.deliverySelect} name="delivery">
-            <option value="very fast">Very fast</option>
-            <option value="fast">Fast</option>
             <option defaultValue="not mentioned" value="not mentioned">
               Not mentioned
             </option>
+            <option value="very fast">Very fast</option>
+            <option value="fast">Fast</option>
           </select>
         </fieldset>
 
