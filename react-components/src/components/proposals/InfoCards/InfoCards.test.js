@@ -1,9 +1,9 @@
-// import { render, screen } from '@testing-library/react';
-// import Cards from './InfoCards';
-//
-// describe('Cards', () => {
-//   it('renders InfoCards component', () => {
-//     render(<Cards />);
-//     expect(screen.getAllByRole('article')).toHaveLength(20);
-//   });
-// });
+import { render, screen } from '@testing-library/react';
+import { InfoCards } from './InfoCards';
+
+describe('InfoCards', () => {
+  it('renders InfoCards component', () => {
+    render(<InfoCards />);
+    expect(screen.queryByRole('article')).toBeNull();
+  });
+});

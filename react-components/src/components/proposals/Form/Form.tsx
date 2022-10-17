@@ -242,7 +242,7 @@ class Form extends Component<FormProps, FormState> {
     const errorText = '* The field is required.';
 
     return (
-      <form className={styles.form} onSubmit={this.handleSubmit}>
+      <form className={styles.form} onSubmit={this.handleSubmit} data-testid="form">
         <label className={`${styles.label} ${styles.text}`}>
           Name:
           <input
@@ -252,6 +252,7 @@ class Form extends Component<FormProps, FormState> {
             type="text"
             name="name"
             autoComplete="off"
+            data-testid="name"
           />
         </label>
         {addErrorMes(
@@ -266,6 +267,7 @@ class Form extends Component<FormProps, FormState> {
             type="date"
             name="dateOfBirth"
             max="2004-01-01"
+            data-testid="date"
           />
         </label>
         {addErrorMes(this.state.form.dateOfBirth ? '' : errorText)}
@@ -278,6 +280,7 @@ class Form extends Component<FormProps, FormState> {
             type="text"
             name="email"
             autoComplete="off"
+            data-testid="email"
           />
         </label>
         {addErrorMes(
@@ -335,7 +338,12 @@ class Form extends Component<FormProps, FormState> {
           <legend className={`${styles.legend} ${styles.text}`}>Color:</legend>
           <div className={styles.wrapper}>
             <label className={styles.label}>
-              <input type="checkbox" name="black" onChange={this.handleUserInput.bind(this)} />
+              <input
+                type="checkbox"
+                name="black"
+                onChange={this.handleUserInput.bind(this)}
+                data-testid="colorInput"
+              />
               black
             </label>
             <label className={styles.label}>
@@ -385,6 +393,7 @@ class Form extends Component<FormProps, FormState> {
           disabled
           type="submit"
           value="Send"
+          data-testid="submit"
         />
         <div className={`text ${styles.alert} ${this.state.alert ? styles.active : ''}`}>
           Your data has been saved
