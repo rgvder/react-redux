@@ -1,32 +1,49 @@
 import React, { Component } from 'react';
 import styles from './Catalog.module.scss';
 import { Card } from '../Card/Card';
-import { Item } from '../../../models/Item.interface';
+import { CatalogState } from '../../../models/CatalogState.interface';
+import { Character } from '../../../models/Character.interface';
+import { Characters } from '../../../models/Characters.interface';
 
-class Catalog extends Component<{ items: Item[] }> {
+const BASE_PATH = 'https://rickandmortyapi.com/api/character';
+// const SEARCH_PATH: string = '/search';
+// const SEARCH_PARAM: string = 'query=';
+
+class Catalog extends Component<Record<string, never>, CatalogState> {
+  state = {
+    searchQuery: '',
+    result: {
+      info: {
+        count: 0,
+        pages: 0,
+        next: null,
+        prev: null,
+      },
+      results: [],
+    },
+  };
+
+  setCharacters = (result: Characters) => this.setState({ result });
+
+  componentDidMount() {
+    fetch(BASE_PATH)
+      .then((res: Response) => res.json())
+      .then((result) => {
+        console.log(result);
+        this.setCharacters(result);
+      })
+      .catch((error) => error);
+  }
+
   render() {
+    const state: Characters = this.state.result;
+
     return (
       <section className={styles.catalog}>
         <div>
-          {this.props.items &&
-            this.props.items.map((item) => (
-              <Card
-                key={item.id}
-                image={item.image}
-                brand={item.brand}
-                brandId={item.brandId}
-                model={item.model}
-                color={item.color}
-                colorId={item.colorId}
-                price={item.price}
-                rating={item.rating}
-                count={item.count}
-                suctionPower={item.suctionPower}
-                cleaningType={item.cleaningType}
-                cleaningTypeId={item.cleaningTypeId}
-                isPopular={item.isPopular}
-                id={item.id}
-              />
+          {state.results &&
+            state.results.map((item: Character) => (
+              <Card key={item.id} image={item.image} name={item.name} status={item.status} />
             ))}
         </div>
       </section>

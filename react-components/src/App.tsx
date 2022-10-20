@@ -2,11 +2,9 @@ import { Routes, Route } from 'react-router-dom';
 import React from 'react';
 import './App.scss';
 
-import { About } from './pages/About/About';
 import { NotFound } from './pages/NotFound/NotFound';
 import Layout from './components/Layout';
 import Main from './pages/Main/Main';
-import Proposals from './pages/Proposals/Proposals';
 
 function App() {
   return (
@@ -14,8 +12,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Main />} />
-          <Route path="about" element={<About />} />
-          <Route path="form" element={<Proposals />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
