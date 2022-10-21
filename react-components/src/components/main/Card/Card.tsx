@@ -1,36 +1,32 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styles from './Card.module.scss';
 import { Character } from '../../../models/Character.interface';
 
-export const Card = (props: Character) => {
-  return (
-    <article className={styles.card}>
-      <img className={styles.image} src={props.image} alt={`${props.name}`} />
-      <div className={styles.content}>
-        <div className={styles.info}>
-          <h3 className="header-text">{`${props.name}`}</h3>
-          <h3 className="header-text">{`${props.status}`}</h3>
+class Card extends Component<{
+  character: Character;
+  selectCharacter: (character: Character) => void;
+}> {
+  handleClick = () => {
+    this.props.selectCharacter(this.props.character);
+  };
 
-          {/*<ul className={styles.info}>*/}
-          {/*  <li className={styles.list}>*/}
-          {/*    <span className="text">Brand </span>*/}
-          {/*    <span className="text feature-text">{`${props.brand}`}</span>*/}
-          {/*  </li>*/}
-          {/*  <li className={styles.list}>*/}
-          {/*    <span className="text">Color</span>*/}
-          {/*    <span className="text feature-text">{`${props.color}`}</span>*/}
-          {/*  </li>*/}
-          {/*  <li className={styles.list}>*/}
-          {/*    <span className="text">Cleaning type</span>*/}
-          {/*    <span className="text feature-text">{`${props.cleaningType}`}</span>*/}
-          {/*  </li>*/}
-          {/*  <li className={styles.list}>*/}
-          {/*    <span className="text">Suction power</span>*/}
-          {/*    <span className="text feature-text">{`${props.suctionPower}`} watts</span>*/}
-          {/*  </li>*/}
-          {/*</ul>*/}
+  render() {
+    return (
+      <article className={styles.card} onClick={this.handleClick}>
+        <img
+          className={styles.image}
+          src={this.props.character.image}
+          alt={`${this.props.character.name}`}
+        />
+        <div className={styles.content}>
+          <div className={styles.info}>
+            <h3 className="header-text">{`${this.props.character.name}`}</h3>
+            <h3 className="header-text">{`${this.props.character.status}`}</h3>
+          </div>
         </div>
-      </div>
-    </article>
-  );
-};
+      </article>
+    );
+  }
+}
+
+export default Card;
