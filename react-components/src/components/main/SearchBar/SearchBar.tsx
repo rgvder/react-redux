@@ -1,56 +1,73 @@
-import React, { ChangeEventHandler, Component, MouseEventHandler } from 'react';
+import React, { Component, KeyboardEventHandler, MouseEventHandler, SyntheticEvent } from 'react';
 import styles from './SearchBar.module.scss';
 
-class SearchBar extends Component<{ filterItems: (query: string) => void }, { value: string }> {
-  constructor(props: { filterItems: (query: string) => void }) {
+class SearchBar extends Component<
+  { addSearchQuery: (searchQuery: string) => void },
+  { searchQuery: string }
+> {
+  public nameInput: React.RefObject<HTMLInputElement> | null;
+
+  constructor(props: { addSearchQuery: (searchQuery: string) => void }) {
     super(props);
 
-    const savedValue: string = localStorage.getItem('value') || '';
+    this.nameInput = React.createRef();
 
     this.state = {
-      value: savedValue,
+      searchQuery: '',
     };
-    this.props.filterItems(savedValue);
   }
 
-  saveValueHandler: ChangeEventHandler = (event) => {
-    const input: HTMLInputElement = event.target as HTMLInputElement;
+  // checkInputValue: () => boolean = () => {
+  //   return !this.nameInput || !this.nameInput.current || !this.nameInput.current.value;
+  // };
 
-    this.setState(() => ({
-      value: input.value,
-    }));
+  // setResult = (filterResult: Characters) => this.setState({ filterResult });
+  //
+  // componentDidMount() {
+  //   fetch(`${BASE_PATH}${SEARCH_PATH}${this.nameInput?.current?.value}`)
+  //     .then((res: Response) => res.json())
+  //     .then((result) => {
+  //       console.log(result);
+  //       this.setResult(result);
+  //     })
+  //     .catch((error) => error);
+  // }
 
-    this.props.filterItems(input.value);
+  saveValueHandler: KeyboardEventHandler<HTMLInputElement> = (
+    event: SyntheticEvent<HTMLInputElement, KeyboardEvent>
+  ) => {
+    event.preventDefault();
 
-    if (!input.value) {
-      localStorage.removeItem('value');
+    if (!this.nameInput || !this.nameInput.current || !this.nameInput.current.value) {
+      return;
+    }
+
+    if (event.nativeEvent.code === 'Enter') {
+      this.setState({ searchQuery: this.nameInput.current.value });
+      this.props.addSearchQuery(this.nameInput.current.value);
     }
   };
 
   removeInputValue: MouseEventHandler = () => {
-    localStorage.removeItem('value');
+    if (!this.nameInput || !this.nameInput.current || !this.nameInput.current.value) {
+      return;
+    }
 
-    this.setState(() => ({
-      value: '',
-    }));
-
-    this.props.filterItems('');
+    this.nameInput.current.value = '';
+    this.setState({ searchQuery: '' });
+    this.props.addSearchQuery('');
   };
-
-  componentWillUnmount() {
-    localStorage.setItem('value', this.state.value);
-  }
 
   render() {
     return (
       <div className={styles.search}>
         <input
-          onChange={this.saveValueHandler}
+          ref={this.nameInput}
+          onKeyUp={this.saveValueHandler}
           className={styles['input-text']}
           type="text"
-          placeholder="Search..."
+          placeholder="Enter the name of the character..."
           autoComplete="off"
-          value={this.state.value}
           autoFocus
         />
         <button className={styles.button} type="button" onClick={this.removeInputValue}>

@@ -5,14 +5,11 @@ import Modal from '../Modal/Modal';
 import { CatalogState } from '../../../models/CatalogState.interface';
 import { Character } from '../../../models/Character.interface';
 import { Characters } from '../../../models/Characters.interface';
+import { BASE_PATH, SEARCH_PATH } from '../../../pages/Main/Main';
 
-const BASE_PATH = 'https://rickandmortyapi.com/api/character';
-// const SEARCH_PATH: string = '/search';
-// const SEARCH_PARAM: string = 'query=';
-
-class Catalog extends Component<Record<string, never>, CatalogState> {
+class Catalog extends Component<{ searchQuery: string }, CatalogState> {
   state = {
-    searchQuery: '',
+    searchQuery: this.props.searchQuery || '',
     result: {
       info: {
         count: 0,
@@ -27,14 +24,24 @@ class Catalog extends Component<Record<string, never>, CatalogState> {
 
   setCharacters = (result: Characters) => this.setState({ result });
 
-  componentDidMount() {
-    fetch(BASE_PATH)
+  getCharacters = () => {
+    fetch(`${BASE_PATH}${SEARCH_PATH}${this.props.searchQuery}`)
       .then((res: Response) => res.json())
       .then((result) => {
-        console.log(result);
         this.setCharacters(result);
+        console.log(this.state.searchQuery);
       })
       .catch((error) => error);
+  };
+
+  componentDidMount() {
+    this.getCharacters();
+  }
+
+  componentDidUpdate(prevProps: { searchQuery: string }) {
+    if (this.props.searchQuery !== prevProps.searchQuery) {
+      this.getCharacters();
+    }
   }
 
   selectCharacter = (character: Character) => {
