@@ -6,6 +6,7 @@ import { CatalogState } from '../../../models/CatalogState.interface';
 import { Character } from '../../../models/Character.interface';
 import { Characters } from '../../../models/Characters.interface';
 import { BASE_PATH, SEARCH_PATH } from '../../../pages/Main/Main';
+import Preloader from '../Preloader/Preloader';
 
 class Catalog extends Component<{ searchQuery: string }, CatalogState> {
   state = {
@@ -20,14 +21,22 @@ class Catalog extends Component<{ searchQuery: string }, CatalogState> {
       results: [],
     },
     selectedCharacter: null,
+    isLoading: true,
   };
 
   setCharacters = (result: Characters) => this.setState({ result });
+
+  setLoading = () =>
+    this.setState((prevState: CatalogState) => ({
+      ...prevState,
+      isLoading: false,
+    }));
 
   getCharacters = () => {
     fetch(`${BASE_PATH}${SEARCH_PATH}${this.props.searchQuery}`)
       .then((res: Response) => res.json())
       .then((result) => {
+        this.setLoading();
         this.setCharacters(result);
         console.log(this.state.searchQuery);
       })
@@ -60,15 +69,20 @@ class Catalog extends Component<{ searchQuery: string }, CatalogState> {
 
   render() {
     const state: Characters = this.state.result;
+    const isLoading: boolean = this.state.isLoading;
 
     return (
       <section className={styles.catalog}>
-        <div>
-          {state.results &&
-            state.results.map((item: Character) => (
-              <Card selectCharacter={this.selectCharacter} key={item.id} character={item} />
-            ))}
-        </div>
+        {isLoading ? (
+          <Preloader />
+        ) : (
+          <div>
+            {state.results &&
+              state.results.map((item: Character) => (
+                <Card selectCharacter={this.selectCharacter} key={item.id} character={item} />
+              ))}
+          </div>
+        )}
         {this.state.selectedCharacter && (
           <Modal character={this.state.selectedCharacter} resetCharacter={this.resetCharacter} />
         )}

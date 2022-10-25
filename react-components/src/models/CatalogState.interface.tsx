@@ -5,4 +5,5 @@ export interface CatalogState {
   searchQuery: string;
   result: Characters;
   selectedCharacter: Character | null;
+  isLoading: boolean;
 }

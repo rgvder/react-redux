@@ -17,22 +17,6 @@ class SearchBar extends Component<
     };
   }
 
-  // checkInputValue: () => boolean = () => {
-  //   return !this.nameInput || !this.nameInput.current || !this.nameInput.current.value;
-  // };
-
-  // setResult = (filterResult: Characters) => this.setState({ filterResult });
-  //
-  // componentDidMount() {
-  //   fetch(`${BASE_PATH}${SEARCH_PATH}${this.nameInput?.current?.value}`)
-  //     .then((res: Response) => res.json())
-  //     .then((result) => {
-  //       console.log(result);
-  //       this.setResult(result);
-  //     })
-  //     .catch((error) => error);
-  // }
-
   saveValueHandler: KeyboardEventHandler<HTMLInputElement> = (
     event: SyntheticEvent<HTMLInputElement, KeyboardEvent>
   ) => {
