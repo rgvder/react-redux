@@ -26,6 +26,10 @@
     border: 1px solid $color-brand;
     color: $color-meta;
 
+    &:disabled {
+      background-color: $color-meta;
+    }
+
     &:hover,
     &:active {
       background-color: $color-brand-dark;

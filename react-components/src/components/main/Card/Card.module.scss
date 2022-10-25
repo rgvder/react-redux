@@ -3,15 +3,23 @@
 .card {
   display: flex;
   border-bottom: 1px solid $color-additional-light;
-  padding: 20px;
-  justify-content: space-between;
-  align-items: center;
+  padding: 15px;
+  align-items: flex-start;
   cursor: pointer;
+  width: 500px;
+  text-align: left;
 }
 
 .image {
+  background-image: url("/assets/source/loadingImage.jpeg");
+  background-size: 150px;
+  height: 150px;
+  width: 150px;
+}
+
+.avatar {
   display: block;
-  width: 200px;
+  width: 150px;
 }
 
 .content {

@@ -2,6 +2,15 @@
 
 .catalog {
   display: flex;
-  flex-direction: column;
-  flex: 0 1 80%;
+  flex-wrap: wrap;
+}
+
+.buttons {
+  display: flex;
+  gap: 60px;
+}
+
+.button {
+  width: 170px;
+  justify-content: center;
 }

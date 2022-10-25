@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEventHandler } from 'react';
 import styles from './Catalog.module.scss';
 import Card from '../Card/Card';
 import Modal from '../Modal/Modal';
@@ -32,24 +32,23 @@ class Catalog extends Component<{ searchQuery: string }, CatalogState> {
       isLoading: false,
     }));
 
-  getCharacters = () => {
-    fetch(`${BASE_PATH}${SEARCH_PATH}${this.props.searchQuery}`)
+  getCharacters = (url: string) => {
+    fetch(url)
       .then((res: Response) => res.json())
       .then((result) => {
         this.setLoading();
         this.setCharacters(result);
-        console.log(this.state.searchQuery);
       })
       .catch((error) => error);
   };
 
   componentDidMount() {
-    this.getCharacters();
+    this.getCharacters(`${BASE_PATH}${SEARCH_PATH}${this.props.searchQuery}`);
   }
 
   componentDidUpdate(prevProps: { searchQuery: string }) {
     if (this.props.searchQuery !== prevProps.searchQuery) {
-      this.getCharacters();
+      this.getCharacters(`${BASE_PATH}${SEARCH_PATH}${this.props.searchQuery}`);
     }
   }
 
@@ -67,26 +66,67 @@ class Catalog extends Component<{ searchQuery: string }, CatalogState> {
     }));
   };
 
+  handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+    const button: HTMLButtonElement = event.target as HTMLButtonElement;
+
+    if (!button.classList.contains('button')) {
+      return;
+    }
+
+    const prev = this.state.result.info.prev;
+    const next = this.state.result.info.next;
+
+    if (prev && button.classList.contains('prev')) {
+      console.log(prev);
+      this.getCharacters(prev);
+    }
+
+    if (next && button.classList.contains('next')) {
+      console.log(next);
+      this.getCharacters(next);
+    }
+  };
+
   render() {
     const state: Characters = this.state.result;
     const isLoading: boolean = this.state.isLoading;
 
     return (
-      <section className={styles.catalog}>
+      <>
+        <div className={styles.buttons}>
+          <button
+            className={`button button_basic prev ${styles.button}`}
+            onClick={this.handleClick}
+            disabled={!state.info.prev}
+          >
+            &#8592;
+          </button>
+          <button
+            className={`button button_basic next ${styles.button}`}
+            onClick={this.handleClick}
+            disabled={!state.info.next}
+          >
+            &#8594;
+          </button>
+        </div>
+
         {isLoading ? (
           <Preloader />
         ) : (
-          <div>
+          <section className={styles.catalog}>
             {state.results &&
               state.results.map((item: Character) => (
                 <Card selectCharacter={this.selectCharacter} key={item.id} character={item} />
               ))}
-          </div>
+            {this.state.selectedCharacter && (
+              <Modal
+                character={this.state.selectedCharacter}
+                resetCharacter={this.resetCharacter}
+              />
+            )}
+          </section>
         )}
-        {this.state.selectedCharacter && (
-          <Modal character={this.state.selectedCharacter} resetCharacter={this.resetCharacter} />
-        )}
-      </section>
+      </>
     );
   }
 }
