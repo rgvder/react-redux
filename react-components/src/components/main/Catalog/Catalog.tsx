@@ -22,22 +22,36 @@ class Catalog extends Component<{ searchQuery: string }, CatalogState> {
     },
     selectedCharacter: null,
     isLoading: true,
+    isError: false,
   };
 
   setCharacters = (result: Characters) => this.setState({ result });
 
-  setLoading = () =>
+  setLoading = (value: boolean) =>
     this.setState((prevState: CatalogState) => ({
       ...prevState,
-      isLoading: false,
+      isLoading: value,
+    }));
+
+  setError = (value: boolean) =>
+    this.setState((prevState: CatalogState) => ({
+      ...prevState,
+      isError: value,
     }));
 
   getCharacters = (url: string) => {
+    this.setError(false);
+    this.setLoading(true);
     fetch(url)
       .then((res: Response) => res.json())
       .then((result) => {
-        this.setLoading();
-        this.setCharacters(result);
+        this.setLoading(false);
+
+        if (!result.error) {
+          this.setCharacters(result);
+        } else {
+          this.setError(true);
+        }
       })
       .catch((error) => error);
   };
@@ -77,12 +91,10 @@ class Catalog extends Component<{ searchQuery: string }, CatalogState> {
     const next = this.state.result.info.next;
 
     if (prev && button.classList.contains('prev')) {
-      console.log(prev);
       this.getCharacters(prev);
     }
 
     if (next && button.classList.contains('next')) {
-      console.log(next);
       this.getCharacters(next);
     }
   };
@@ -90,6 +102,7 @@ class Catalog extends Component<{ searchQuery: string }, CatalogState> {
   render() {
     const state: Characters = this.state.result;
     const isLoading: boolean = this.state.isLoading;
+    const isError: boolean = this.state.isError;
 
     return (
       <>
@@ -97,20 +110,22 @@ class Catalog extends Component<{ searchQuery: string }, CatalogState> {
           <button
             className={`button button_basic prev ${styles.button}`}
             onClick={this.handleClick}
-            disabled={!state.info.prev}
+            disabled={!state?.info?.prev || isError || isLoading}
           >
             &#8592;
           </button>
           <button
             className={`button button_basic next ${styles.button}`}
             onClick={this.handleClick}
-            disabled={!state.info.next}
+            disabled={!state?.info?.next || isError || isLoading}
           >
             &#8594;
           </button>
         </div>
 
-        {isLoading ? (
+        {isError ? (
+          <h3 className="header-text">Sorry, the data is not found</h3>
+        ) : isLoading ? (
           <Preloader />
         ) : (
           <section className={styles.catalog}>

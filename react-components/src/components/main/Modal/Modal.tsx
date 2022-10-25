@@ -10,6 +10,10 @@ class Modal extends Component<{ character: Character; resetCharacter: () => void
   };
 
   render() {
+    const episode: string[] = this.props.character.episode.map((item: string) =>
+      item.replace('https://rickandmortyapi.com/api/episode/', '')
+    );
+
     return (
       <>
         {this.props.character && (
@@ -44,22 +48,24 @@ class Modal extends Component<{ character: Character; resetCharacter: () => void
                         <span className="text">Created</span>
                         <span className="text feature-text">{`${this.props.character.created}`}</span>
                       </li>
+                      <li className={styles.list}>
+                        <span className="text">Origin</span>
+                        <span className="text feature-text">{`${this.props.character.origin.name}`}</span>
+                      </li>
+                      <li className={styles.list}>
+                        <span className="text">Location</span>
+                        <span className="text feature-text">{`${this.props.character.location.name}`}</span>
+                      </li>
                     </ul>
                   </div>
                 </div>
                 <div className={styles.info}>
                   <ul className={styles.info}>
                     <li className={styles.list}>
-                      <span className="text">Origin</span>
-                      <span className="text feature-text">{`${this.props.character.origin.name}`}</span>
-                    </li>
-                    <li className={styles.list}>
-                      <span className="text">Location</span>
-                      <span className="text feature-text">{`${this.props.character.location.name}`}</span>
-                    </li>
-                    <li className={styles.list}>
-                      <span className="text">Episode</span>
-                      <span className="text feature-text">{`${this.props.character.episode}`}</span>
+                      <span className="text">{`${
+                        episode.length < 2 ? 'Episode' : 'Episodes'
+                      }`}</span>
+                      <span className="text feature-text">{`${episode.join(', ')}`}</span>
                     </li>
                   </ul>
                 </div>

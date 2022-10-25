@@ -17,7 +17,7 @@
 
 .modal {
   width: 600px;
-  height: 600px;
+  height: 500px;
   display: flex;
   flex-direction: column;
   background-color: $color-meta;
@@ -26,11 +26,12 @@
   padding: 10px;
   align-items: center;
   z-index: 5;
+  text-align: left;
 }
 
 .image {
   display: block;
-  width: 300px;
+  width: 200px;
   border: 2px solid $color-brand;
   border-radius: 5px;
   overflow: hidden;
@@ -49,7 +50,7 @@
 .content {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 90%;
   gap: 10px;
 }
 

@@ -8,7 +8,6 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 30px;
-  padding-bottom: 30px;
 }
 
 .logo {
@@ -16,12 +15,6 @@
   align-items: center;
 }
 
-.title {
-  @include font(normal, 900, 2rem, 130%);
-  color: $color-basic;
-}
-
-.nav {
-  display: flex;
-  gap: 20px;
+.image {
+  width: 433px;
 }

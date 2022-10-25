@@ -1,8 +1,10 @@
-import React, { Component, lazy, Suspense } from 'react';
+import React, { Component } from 'react';
+import Catalog from '../../components/main/Catalog/Catalog';
 import SearchBar from '../../components/main/SearchBar/SearchBar';
 
 export const BASE_PATH = 'https://rickandmortyapi.com/api/character';
 export const SEARCH_PATH = '/?name=';
+// export const SEARCH_PARAM = 'query=';
 
 class Main extends Component {
   state = {
@@ -14,13 +16,10 @@ class Main extends Component {
   };
 
   render() {
-    const Catalog = lazy(() => import('../../components/main/Catalog/Catalog'));
     return (
       <>
         <SearchBar addSearchQuery={this.addSearchQuery} />
-        <Suspense fallback={<div>Loading...</div>}>
-          <Catalog searchQuery={this.state.searchQuery} />
-        </Suspense>
+        <Catalog searchQuery={this.state.searchQuery} />
       </>
     );
   }

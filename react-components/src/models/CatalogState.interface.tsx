@@ -6,4 +6,5 @@ export interface CatalogState {
   result: Characters;
   selectedCharacter: Character | null;
   isLoading: boolean;
+  isError: boolean;
 }
