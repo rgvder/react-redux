@@ -17,9 +17,13 @@ class Modal extends Component<{ character: Character; resetCharacter: () => void
     return (
       <>
         {this.props.character && (
-          <div className={`${styles.overlay} close-modal`} onClick={this.handleClick}>
-            <div className={styles.modal}>
-              <button className={`${styles.button} close-modal`} />
+          <div
+            className={`${styles.overlay} close-modal`}
+            onClick={this.handleClick}
+            data-testid="overlay"
+          >
+            <div className={styles.modal} data-testid="modal">
+              <button className={`${styles.button} close-modal`} data-testid="button" />
               <div className={styles.content}>
                 <div className={styles.main}>
                   <img
@@ -45,8 +49,14 @@ class Modal extends Component<{ character: Character; resetCharacter: () => void
                         <span className="text feature-text">{`${this.props.character.gender}`}</span>
                       </li>
                       <li className={styles.list}>
+                        <span className="text">Species </span>
+                        <span className="text feature-text">{`${this.props.character.species}`}</span>
+                      </li>
+                      <li className={styles.list}>
                         <span className="text">Created</span>
-                        <span className="text feature-text">{`${this.props.character.created}`}</span>
+                        <span className="text feature-text">{`${new Date(
+                          this.props.character.created
+                        )}`}</span>
                       </li>
                       <li className={styles.list}>
                         <span className="text">Origin</span>

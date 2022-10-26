@@ -53,8 +53,14 @@ class SearchBar extends Component<
           placeholder="Enter the name of the character..."
           autoComplete="off"
           autoFocus
+          data-testid="input"
         />
-        <button className={styles.button} type="button" onClick={this.removeInputValue}>
+        <button
+          className={styles.button}
+          type="button"
+          onClick={this.removeInputValue}
+          data-testid="button"
+        >
           <svg
             className={styles.icon}
             width="14"
