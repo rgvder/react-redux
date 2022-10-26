@@ -12,7 +12,7 @@ class Card extends Component<{
 
   render() {
     return (
-      <article className={styles.card} onClick={this.handleClick}>
+      <article className={styles.card} onClick={this.handleClick} data-testid="card">
         <div className={styles.image}>
           <img
             className={styles.avatar}

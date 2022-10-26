@@ -1,26 +1,48 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import SearchBar from './SearchBar';
+import userEvent from '@testing-library/user-event';
 
 describe('SearchBar', () => {
-  beforeEach(() => {
-    Object.defineProperty(window, 'localStorage', {
-      value: {
-        getItem: jest.fn(() => null),
-        setItem: jest.fn(() => null),
-      },
-      writable: true,
-    });
+  it('renders input in SearchBar component', () => {
+    render(<SearchBar />);
+    expect(screen.getByPlaceholderText('Enter the name of the character...')).toHaveClass(
+      'input-text'
+    );
   });
 
-  it('renders SearchBar component', () => {
+  it('input has focus', () => {
     render(<SearchBar />);
+    expect(screen.getByTestId('input')).toHaveFocus();
+  });
 
-    const input = screen.queryByPlaceholderText(/Search/i);
+  it('input has value', () => {
+    render(<SearchBar />);
+    expect(screen.getByTestId('input')).toHaveValue('');
+    userEvent.type(screen.getByTestId('input'), 'rick');
+    expect(screen.getByTestId('input')).toHaveValue('rick');
+  });
 
-    fireEvent.change(input, { target: { value: 'test' } });
-    cleanup();
+  it('renders button in SearchBar component', () => {
+    render(<SearchBar />);
+    expect(screen.getByTestId('button')).toHaveClass('button');
+  });
 
-    expect(window.localStorage.setItem).toHaveBeenCalledTimes(1);
-    expect(window.localStorage.setItem).toHaveBeenCalledWith('value', 'test');
+  it('button is clicked', () => {
+    render(<SearchBar addSearchQuery={() => {}} />);
+    expect(screen.getByTestId('input')).toHaveValue('');
+    userEvent.type(screen.getByTestId('input'), 'rick');
+    fireEvent.click(screen.getByTestId('button'));
+    expect(screen.getByTestId('input')).toHaveValue('');
+  });
+
+  it('input value is saved', () => {
+    const saveValueHandler = jest.fn();
+
+    render(<SearchBar addSearchQuery={saveValueHandler} />);
+    expect(screen.getByTestId('input')).toHaveValue('');
+    userEvent.type(screen.getByTestId('input'), 'rick');
+    expect(saveValueHandler).not.toBeCalled();
+    fireEvent.keyUp(screen.getByTestId('input'), { code: 'Enter' });
+    expect(saveValueHandler).toBeCalled();
   });
 });

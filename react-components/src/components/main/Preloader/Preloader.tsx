@@ -5,10 +5,10 @@ class Preloader extends Component<Record<string, never>, Record<string, never>> 
   render() {
     return (
       <div className={styles.preloader}>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+        <div />
+        <div />
+        <div />
+        <div />
       </div>
     );
   }
