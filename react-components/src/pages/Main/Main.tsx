@@ -5,7 +5,7 @@ import SearchBar from '../../components/main/SearchBar/SearchBar';
 export const BASE_PATH = 'https://rickandmortyapi.com/api/character';
 export const SEARCH_PATH = '/?name=';
 
-class Main extends Component<{ searchQuery: string }> {
+class Main extends Component<Record<string, never>, { searchQuery: string }> {
   state = {
     searchQuery: '',
   };
