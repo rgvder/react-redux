@@ -1,15 +1,29 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import styles from './Header.module.scss';
-import logo from '../../assets/source/Rick_and_Morty_Logo_and_Image.webp';
 
 class Header extends Component {
   render() {
     return (
       <header className={styles.header}>
         <div className={`${styles.wrapper} wrapper`}>
-          <div className={styles.logo}>
-            <img className={styles.image} src={logo} alt="Rick and Morty" />
-          </div>
+          <nav className={styles.nav}>
+            <NavLink className={`text ${styles.link}`} to="/" end>
+              Main
+            </NavLink>
+            <NavLink className={`text ${styles.link}`} to="/components">
+              Components
+            </NavLink>
+            <NavLink className={`text ${styles.link}`} to="/form">
+              Form
+            </NavLink>
+            <NavLink className={`text ${styles.link}`} to="/about">
+              About us
+            </NavLink>
+            <NavLink className={`text ${styles.link}`} to="/api">
+              API
+            </NavLink>
+          </nav>
         </div>
       </header>
     );

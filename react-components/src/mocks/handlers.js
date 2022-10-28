@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { BASE_PATH } from '../pages/Main/Main';
+import { BASE_PATH } from '../pages/Api/Api';
 
 export const RANDOM_STRING = 'rickkk';
 

@@ -1,20 +1,18 @@
 @import '../../styles/base/constants';
 
-.header {
+.link {
+  font-size: 25px;
 }
 
 .wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding-top: 30px;
+  padding-bottom: 30px;
 }
 
-.logo {
+.nav {
   display: flex;
-  align-items: center;
-}
-
-.image {
-  width: 433px;
+  gap: 30px;
 }

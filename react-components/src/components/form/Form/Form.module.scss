@@ -1,0 +1,68 @@
+@import '../../../styles/base/constants';
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.text {
+  color: $color-basic;
+  @include font(normal, 700, 1.6rem, 160%);
+}
+
+.label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.input {
+  border: 1px solid $color-additional-light;
+  border-radius: 4px;
+  overflow: hidden;
+  @include font(normal, 400, 1.4rem, 150%);
+  color: $color-basic;
+  background: $color-meta;
+  padding: 9px 12px;
+  transition: all .3s linear;
+  margin-top: 5px;
+
+  &:focus,
+  &:hover {
+    border: 1px solid rgba(23, 105, 106, 0.4);
+    box-shadow: 0 80px 80px -20px rgba(23, 105, 106, 0.08), 0px 30px 24px -10px rgba(23, 105, 106, 0.05), 0px 12px 10px -6px rgba(23, 105, 106, 0.04), 0px 4px 4px -4px rgba(30, 33, 44, 0.03);
+  }
+}
+
+.wrapper {
+  display: flex;
+  gap: 15px;
+}
+
+.legend {
+  text-align: left;
+}
+
+.error {
+  height: 5px;
+  color: red;
+}
+
+.alert {
+  display: none;
+}
+
+.active {
+  display: block;
+  background-color: $color-brand;
+  border: 1px solid $color-basic;
+  border-radius: 5px;
+  padding: 10px;
+  color: $color-meta;
+
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+}

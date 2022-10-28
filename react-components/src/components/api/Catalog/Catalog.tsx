@@ -5,7 +5,7 @@ import Modal from '../Modal/Modal';
 import { CatalogState } from '../../../models/CatalogState.interface';
 import { Character } from '../../../models/Character.interface';
 import { Characters } from '../../../models/Characters.interface';
-import { BASE_PATH, SEARCH_PATH } from '../../../pages/Main/Main';
+import { BASE_PATH, SEARCH_PATH } from '../../../pages/Api/Api';
 import Preloader from '../Preloader/Preloader';
 
 class Catalog extends Component<{ searchQuery: string }, CatalogState> {
