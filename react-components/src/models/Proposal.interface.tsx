@@ -1,7 +1,7 @@
 export interface Proposal {
   name: string;
   dateOfBirth: string;
-  image: string;
+  image: string | FileList;
   email: string;
   deliveryTerm: 'Very fast' | 'Fast' | 'Not mentioned';
   color: string[];
@@ -9,9 +9,8 @@ export interface Proposal {
   suctionPower: string;
   cleaningType: string;
   disabledButton?: boolean;
+  submit?: boolean;
   id?: number;
 }
 
-export type ProposalsState = {
-  proposals: Proposal[];
-};
+export type ProposalsState = Proposal[];

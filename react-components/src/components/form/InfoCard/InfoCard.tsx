@@ -5,7 +5,7 @@ import { Proposal } from '../../../models/Proposal.interface';
 export const InfoCard = (props: Proposal) => {
   return (
     <article className={styles.infoCard}>
-      <img className={styles.image} src={props.image} alt={`${props.name}`} />
+      <img className={styles.image} src={props.image as string} alt={`${props.name}`} />
       <div className={styles.content}>
         <div className={styles.info}>
           <h3 className="header-text">{`${props.name}`}</h3>

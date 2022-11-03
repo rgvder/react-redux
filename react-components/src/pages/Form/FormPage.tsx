@@ -1,33 +1,33 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import styles from '../../styles/TextPages.module.scss';
 import Form from '../../components/form/Form/Form';
 import { InfoCards } from '../../components/form/InfoCards/InfoCards';
 import { Proposal, ProposalsState } from '../../models/Proposal.interface';
 
-class FormPage extends Component<Record<string, never>, ProposalsState> {
-  state = {
-    proposals: [],
+const useForm = () => {
+  const [proposals, setProposals] = useState<ProposalsState>([]);
+
+  const addProposal: (proposal: Proposal) => void = (proposal: Proposal) => {
+    setProposals([...proposals, { ...proposal, id: proposals.length }]);
   };
 
-  addProposal(proposal: Proposal) {
-    this.setState((prevState: ProposalsState) => ({
-      proposals: [...prevState.proposals, { ...proposal, id: prevState.proposals.length }],
-    }));
-  }
+  return { proposals, addProposal };
+};
 
-  render() {
-    return (
-      <>
-        <h2 className={styles.heading}>Dear buyer!</h2>
-        <p className={styles.text}>
-          If you did not find the product you are looking for, please fill out the form below. We
-          will definitely contact you.
-        </p>
-        <Form addProposal={this.addProposal.bind(this)} />
-        <InfoCards proposals={this.state.proposals} />
-      </>
-    );
-  }
-}
+const FormPage = () => {
+  const { proposals, addProposal } = useForm();
+
+  return (
+    <>
+      <h2 className={styles.heading}>Dear buyer!</h2>
+      <p className={styles.text}>
+        If you did not find the product you are looking for, please fill out the form below. We will
+        definitely contact you.
+      </p>
+      <Form addProposal={addProposal} />
+      <InfoCards proposals={proposals} />
+    </>
+  );
+};
 
 export default FormPage;
