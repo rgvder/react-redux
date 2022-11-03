@@ -1,16 +1,16 @@
-import React, { Component, MouseEventHandler } from 'react';
+import React, { MouseEventHandler, useEffect, useReducer } from 'react';
 import styles from './Catalog.module.scss';
 import Card from '../Card/Card';
 import Modal from '../Modal/Modal';
-import { CatalogState } from '../../../models/CatalogState.interface';
+import { actionTypes, CatalogAction, CatalogState } from '../../../models/CatalogState.interface';
 import { Character } from '../../../models/Character.interface';
 import { Characters } from '../../../models/Characters.interface';
 import { BASE_PATH, SEARCH_PATH } from '../../../pages/Api/Api';
 import Preloader from '../Preloader/Preloader';
 
-class Catalog extends Component<{ searchQuery: string }, CatalogState> {
-  state = {
-    searchQuery: this.props.searchQuery || '',
+const useCatalog = (props: { searchQuery: string }) => {
+  const INITIAL_STATE: CatalogState = {
+    searchQuery: props.searchQuery || '',
     result: {
       info: {
         count: 0,
@@ -25,125 +25,147 @@ class Catalog extends Component<{ searchQuery: string }, CatalogState> {
     isError: false,
   };
 
-  setCharacters = (result: Characters) => this.setState({ result });
+  const catalogReducer: (currentState: CatalogState, action: CatalogAction) => CatalogState = (
+    currentState: CatalogState,
+    action: CatalogAction
+  ) => {
+    switch (action.type) {
+      case actionTypes.ERROR:
+        return {
+          ...currentState,
+          isError: true,
+        };
+      case actionTypes.NO_ERROR:
+        return {
+          ...currentState,
+          isError: false,
+        };
+      case actionTypes.LOADING:
+        return {
+          ...currentState,
+          isLoading: true,
+        };
+      case actionTypes.NO_LOADING:
+        return {
+          ...currentState,
+          isLoading: false,
+        };
+      case actionTypes.FETCH_SUCCESS:
+        return {
+          ...currentState,
+          result: action.payload as Characters,
+        };
+      case actionTypes.SELECT_CHARACTER:
+        return {
+          ...currentState,
+          selectedCharacter: action.payload as Character,
+        };
+      case actionTypes.RESET_CHARACTER:
+        return {
+          ...currentState,
+          selectedCharacter: null,
+        };
+      default:
+        return currentState;
+    }
+  };
 
-  setLoading = (value: boolean) =>
-    this.setState((prevState: CatalogState) => ({
-      ...prevState,
-      isLoading: value,
-    }));
+  const [state, dispatchState] = useReducer(catalogReducer, INITIAL_STATE);
 
-  setError = (value: boolean) =>
-    this.setState((prevState: CatalogState) => ({
-      ...prevState,
-      isError: value,
-    }));
-
-  getCharacters = (url: string) => {
-    this.setError(false);
-    this.setLoading(true);
+  const getCharacters = (url: string) => {
+    dispatchState({ type: actionTypes.NO_ERROR });
+    dispatchState({ type: actionTypes.LOADING });
     fetch(url)
       .then((res: Response) => res.json())
       .then((result) => {
-        this.setLoading(false);
+        dispatchState({ type: actionTypes.NO_LOADING });
 
         if (!result.error) {
-          this.setCharacters(result);
+          dispatchState({ type: actionTypes.FETCH_SUCCESS, payload: result });
         } else {
-          this.setError(true);
+          dispatchState({ type: actionTypes.ERROR });
         }
       })
       .catch((error) => error);
   };
 
-  componentDidMount() {
-    this.getCharacters(`${BASE_PATH}${SEARCH_PATH}${this.props.searchQuery}`);
-  }
+  useEffect(() => {
+    getCharacters(`${BASE_PATH}${SEARCH_PATH}${props.searchQuery}`);
+  }, [props.searchQuery]);
 
-  componentDidUpdate(prevProps: { searchQuery: string }) {
-    if (this.props.searchQuery !== prevProps.searchQuery) {
-      this.getCharacters(`${BASE_PATH}${SEARCH_PATH}${this.props.searchQuery}`);
-    }
-  }
-
-  selectCharacter = (character: Character) => {
-    this.setState((prevState: CatalogState) => ({
-      ...prevState,
-      selectedCharacter: character,
-    }));
+  const selectCharacter = (character: Character) => {
+    dispatchState({ type: actionTypes.SELECT_CHARACTER, payload: character });
   };
 
-  resetCharacter = () => {
-    this.setState((prevState: CatalogState) => ({
-      ...prevState,
-      selectedCharacter: null,
-    }));
+  const resetCharacter = () => {
+    dispatchState({ type: actionTypes.RESET_CHARACTER });
   };
 
-  handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     const button: HTMLButtonElement = event.target as HTMLButtonElement;
 
     if (!button.classList.contains('button')) {
       return;
     }
 
-    const prev = this.state.result.info.prev;
-    const next = this.state.result.info.next;
+    const prev = state.result.info.prev;
+    const next = state.result.info.next;
 
     if (prev && button.classList.contains('prev')) {
-      this.getCharacters(prev);
+      getCharacters(prev);
     }
 
     if (next && button.classList.contains('next')) {
-      this.getCharacters(next);
+      getCharacters(next);
     }
   };
 
-  render() {
-    const state: Characters = this.state.result;
-    const isLoading: boolean = this.state.isLoading;
-    const isError: boolean = this.state.isError;
+  return { state, handleClick, selectCharacter, resetCharacter };
+};
 
-    return (
-      <>
-        <div className={styles.buttons}>
-          <button
-            className={`button button_basic prev ${styles.button}`}
-            onClick={this.handleClick}
-            disabled={!state?.info?.prev || isError || isLoading}
-          >
-            &#8592;
-          </button>
-          <button
-            className={`button button_basic next ${styles.button}`}
-            onClick={this.handleClick}
-            disabled={!state?.info?.next || isError || isLoading}
-          >
-            &#8594;
-          </button>
-        </div>
+const Catalog = (props: { searchQuery: string }) => {
+  const { state, handleClick, selectCharacter, resetCharacter } = useCatalog(props);
 
-        {isError ? (
-          <h3 className="header-text">Sorry, the data is not found</h3>
-        ) : isLoading ? (
-          <Preloader />
-        ) : (
-          <section className={styles.catalog}>
-            {state.results &&
-              state.results.map((item: Character) => (
-                <Card selectCharacter={this.selectCharacter} key={item.id} character={item} />
-              ))}
-            {this.state.selectedCharacter && (
-              <Modal
-                character={this.state.selectedCharacter}
-                resetCharacter={this.resetCharacter}
-              />
-            )}
-          </section>
-        )}
-      </>
-    );
-  }
-}
+  const currentState: Characters = state.result;
+  const isLoading: boolean = state.isLoading;
+  const isError: boolean = state.isError;
+
+  return (
+    <>
+      <div className={styles.buttons}>
+        <button
+          className={`button button_basic prev ${styles.button}`}
+          onClick={handleClick}
+          disabled={!currentState?.info?.prev || isError || isLoading}
+        >
+          &#8592;
+        </button>
+        <button
+          className={`button button_basic next ${styles.button}`}
+          onClick={handleClick}
+          disabled={!currentState?.info?.next || isError || isLoading}
+        >
+          &#8594;
+        </button>
+      </div>
+
+      {isError ? (
+        <h3 className="header-text">Sorry, the data is not found</h3>
+      ) : isLoading ? (
+        <Preloader />
+      ) : (
+        <section className={styles.catalog}>
+          {currentState.results &&
+            currentState.results.map((item: Character) => (
+              <Card selectCharacter={selectCharacter} key={item.id} character={item} />
+            ))}
+          {state.selectedCharacter && (
+            <Modal character={state.selectedCharacter} resetCharacter={resetCharacter} />
+          )}
+        </section>
+      )}
+    </>
+  );
+};
 
 export default Catalog;
