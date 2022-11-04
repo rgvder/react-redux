@@ -36,19 +36,22 @@ describe('Form', () => {
     expect(screen.getByTestId('name')).toHaveValue('fhj');
   });
 
-  it('validate email', () => {
-    render(<Form />);
+  it('validate email', async () => {
+    const addProposal = jest.fn();
+    render(<Form addProposal={addProposal} />);
     userEvent.type(screen.getByTestId('email'), 'fhj');
     fireEvent.click(screen.getByTestId('submit'));
     expect(
-      screen.getByText(/The data you entered is not in the right format/i)
+      await screen.findByText(
+        '* The field is required. The data you entered is not in the right format.'
+      )
     ).toBeInTheDocument();
   });
 
   it('color input is checked', () => {
     render(<Form />);
-    expect(screen.getByTestId('colorInput')).not.toBeChecked();
-    fireEvent.click(screen.getByTestId('colorInput'));
-    expect(screen.getByTestId('colorInput')).toBeChecked();
+    expect(screen.getByTestId('white')).not.toBeChecked();
+    fireEvent.click(screen.getByTestId('white'));
+    expect(screen.getByTestId('white')).toBeChecked();
   });
 });

@@ -7,7 +7,9 @@ const useSearchBar = (initialValue: string, props: { filterItems: (query: string
   const onChange: ChangeEventHandler = (event) => {
     const input: HTMLInputElement = event.target as HTMLInputElement;
 
-    setValue(input.value);
+    if (value !== input.value) {
+      setValue(input.value);
+    }
   };
 
   const onClick: MouseEventHandler = () => {
@@ -17,6 +19,8 @@ const useSearchBar = (initialValue: string, props: { filterItems: (query: string
   useEffect(() => {
     props.filterItems(value);
     localStorage.setItem('value', value);
+
+    console.log(value);
 
     if (!localStorage.getItem('value')) {
       localStorage.removeItem('value');

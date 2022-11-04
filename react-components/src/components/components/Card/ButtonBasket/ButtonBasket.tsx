@@ -1,27 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styles from './ButtonBasket.module.scss';
+import useActiveButton from '../useActiveButton';
 
-class ButtonBasket extends Component<Record<string, never>, { isAdded: boolean }> {
-  state = {
-    isAdded: false,
-  };
+const ButtonBasket = () => {
+  const { state, toggleHandler } = useActiveButton();
 
-  toggleHandler = () => {
-    this.setState(({ isAdded }) => ({
-      isAdded: !isAdded,
-    }));
-  };
-
-  render() {
-    return (
-      <button
-        className={`button button_basic ${styles['button-basket']}`}
-        onClick={this.toggleHandler}
-      >
-        {this.state.isAdded ? 'Remove' : 'Buy'}
-      </button>
-    );
-  }
-}
+  return (
+    <button className={`button button_basic ${styles['button-basket']}`} onClick={toggleHandler}>
+      {state ? 'Remove' : 'Buy'}
+    </button>
+  );
+};
 
 export default ButtonBasket;
