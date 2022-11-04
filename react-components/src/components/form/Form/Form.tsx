@@ -70,7 +70,6 @@ const Form = (props: FormProps) => {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)} data-testid="form">
-      <div>{submitCount}</div>
       <label className={`${styles.label} ${styles.text}`}>
         Name:
         <input

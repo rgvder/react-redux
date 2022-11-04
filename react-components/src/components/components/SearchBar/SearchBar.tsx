@@ -20,8 +20,6 @@ const useSearchBar = (initialValue: string, props: { filterItems: (query: string
     props.filterItems(value);
     localStorage.setItem('value', value);
 
-    console.log(value);
-
     if (!localStorage.getItem('value')) {
       localStorage.removeItem('value');
     }

@@ -15,8 +15,8 @@ describe('Catalog', () => {
   it('renders Catalog component', async () => {
     render(<Catalog searchQuery={RANDOM_STRING} />);
 
-    await screen.findAllByTestId('card');
-    expect(screen.getAllByTestId('card')).toHaveLength(0);
-    expect(screen.getByText('Sorry, the data is not found')).toBeInTheDocument();
+    await screen.queryAllByTestId('card');
+    expect(await screen.queryAllByTestId('card')).toHaveLength(0);
+    expect(await screen.findByText('Sorry, the data is not found')).toBeInTheDocument();
   });
 });

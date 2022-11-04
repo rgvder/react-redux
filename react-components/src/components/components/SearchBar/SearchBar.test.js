@@ -23,7 +23,7 @@ describe('SearchBar', () => {
     fireEvent.change(input, { target: { value: 'test' } });
     cleanup();
 
-    expect(window.localStorage.setItem).toHaveBeenCalledTimes(1);
+    expect(window.localStorage.setItem).toHaveBeenCalled();
     expect(window.localStorage.setItem).toHaveBeenCalledWith('value', 'test');
   });
 });
