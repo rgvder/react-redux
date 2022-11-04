@@ -18,7 +18,7 @@ const useSearchBar = (
   ) => {
     event.preventDefault();
 
-    if (!nameInput || !nameInput.current || !nameInput.current.value) {
+    if (!nameInput?.current) {
       return;
     }
 

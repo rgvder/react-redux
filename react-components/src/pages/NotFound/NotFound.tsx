@@ -8,7 +8,7 @@ export const NotFound = () => {
       <h2 className={styles.heading}>Sorry, page not found!</h2>
       <p className={styles.text}>
         To see our products go to{' '}
-        <Link className={styles.link} to="/">
+        <Link className={styles.link} to="components">
           the main page
         </Link>
         .

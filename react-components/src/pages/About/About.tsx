@@ -12,7 +12,7 @@ export const About = () => {
       </p>
       <p className={styles.text}>
         To see our products go to{' '}
-        <Link className={styles.link} to="/">
+        <Link className={styles.link} to="/components">
           the main page
         </Link>
         .
