@@ -15,5 +15,5 @@ export interface FormState {
     suctionPower: boolean;
     cleaningType: boolean;
   };
-  alert: boolean;
+  alert?: boolean;
 }

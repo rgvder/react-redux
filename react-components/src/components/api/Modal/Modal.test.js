@@ -1,10 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import Modal from './Modal';
+import ApiInfoPage from './ApiInfoPage';
 import Catalog from '../Catalog/Catalog';
 import Card from '../Card/Card';
 
-describe('Modal', () => {
-  it('renders Modal component', async () => {
+describe('ApiInfoPage', () => {
+  it('renders ApiInfoPage component', async () => {
     const character = {
       name: 'Rick',
       image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
@@ -25,14 +25,14 @@ describe('Modal', () => {
       id: 1,
     };
 
-    render(<Modal character={character} />);
+    render(<ApiInfoPage character={character} />);
     expect(await screen.findByText(/Rick/i)).toBeInTheDocument();
     expect(await screen.findByText(/Status/i)).toBeInTheDocument();
     expect(await screen.findByRole(/img/i)).toBeInTheDocument();
   });
 
-  it('renders button in Modal component, button is clicked', async () => {
-    render(<Catalog searchQuery={() => {}} />, <Card />, <Modal character={() => {}} />);
+  it('renders button in ApiInfoPage component, button is clicked', async () => {
+    render(<Catalog searchQuery={() => {}} />, <Card />, <ApiInfoPage character={() => {}} />);
     const cards = await screen.findAllByRole('article');
     const card = cards[4];
 
@@ -44,7 +44,7 @@ describe('Modal', () => {
   });
 
   it('overlay is clicked', async () => {
-    render(<Catalog searchQuery={() => {}} />, <Card />, <Modal character={() => {}} />);
+    render(<Catalog searchQuery={() => {}} />, <Card />, <ApiInfoPage character={() => {}} />);
     const cards = await screen.findAllByRole('article');
     const card = cards[2];
 
@@ -56,7 +56,7 @@ describe('Modal', () => {
   });
 
   it('modal is clicked', async () => {
-    render(<Catalog searchQuery={() => {}} />, <Card />, <Modal character={() => {}} />);
+    render(<Catalog searchQuery={() => {}} />, <Card />, <ApiInfoPage character={() => {}} />);
     const cards = await screen.findAllByRole('article');
     const card = cards[1];
 

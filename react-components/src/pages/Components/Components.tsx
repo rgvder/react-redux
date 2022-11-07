@@ -1,31 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import SearchBar from '../../components/components/SearchBar/SearchBar';
 import Catalog from '../../components/components/Catalog/Catalog';
-import items from '../../assets/source/items.json';
-import { Item } from '../../models/Item.interface';
-
-const useComponents = (props: Item[]) => {
-  const [state, setState] = useState(props);
-
-  const filterItems: (query: string) => void = (query: string) => {
-    setState([
-      ...props.filter(
-        (item: Item) => !query || item.model.toLowerCase().includes(query.toLowerCase())
-      ),
-    ]);
-  };
-
-  return { state, filterItems };
-};
+import { Context } from '../../components/AppContext/Context';
 
 const Components = () => {
-  const { state, filterItems } = useComponents(items);
+  const appContext = useContext(Context);
 
   return (
     <>
-      <SearchBar filterItems={filterItems} />
-      {state.length ? (
-        <Catalog items={state} />
+      <SearchBar />
+      {appContext.state.componentItems.length ? (
+        <Catalog />
       ) : (
         <p className="text">Nothing was found according to your request.</p>
       )}

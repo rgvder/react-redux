@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './InfoCards.module.scss';
 import { InfoCard } from '../InfoCard/InfoCard';
 import { Proposal } from '../../../models/Proposal.interface';
+import { Context } from '../../AppContext/Context';
 
-export const InfoCards = ({ proposals }: { proposals: Proposal[] }) => {
+export const InfoCards = () => {
+  const appContext = useContext(Context);
+
   return (
     <section className={styles.infoCards}>
       <div>
-        {proposals &&
-          proposals.map((proposal: Proposal) => (
+        {appContext.state.proposals &&
+          appContext.state.proposals.map((proposal: Proposal) => (
             <InfoCard
               key={proposal.id}
               image={proposal.image}

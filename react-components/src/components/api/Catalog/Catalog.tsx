@@ -1,7 +1,7 @@
 import React, { MouseEventHandler, useEffect, useReducer } from 'react';
 import styles from './Catalog.module.scss';
 import Card from '../Card/Card';
-import Modal from '../Modal/Modal';
+import ApiInfoPage from '../Modal/ApiInfoPage';
 import { actionTypes, CatalogAction, CatalogState } from '../../../models/CatalogState.interface';
 import { Character } from '../../../models/Character.interface';
 import { Characters } from '../../../models/Characters.interface';
@@ -160,7 +160,7 @@ const Catalog = (props: { searchQuery: string }) => {
               <Card selectCharacter={selectCharacter} key={item.id} character={item} />
             ))}
           {state.selectedCharacter && (
-            <Modal character={state.selectedCharacter} resetCharacter={resetCharacter} />
+            <ApiInfoPage character={state.selectedCharacter} resetCharacter={resetCharacter} />
           )}
         </section>
       )}

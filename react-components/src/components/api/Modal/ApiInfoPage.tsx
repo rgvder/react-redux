@@ -1,8 +1,8 @@
 import React, { SyntheticEvent } from 'react';
-import styles from './Modal.module.scss';
+import styles from './ApiInfoPage.module.scss';
 import { Character } from '../../../models/Character.interface';
 
-const Modal = (props: { character: Character; resetCharacter: () => void }) => {
+const ApiInfoPage = (props: { character: Character; resetCharacter: () => void }) => {
   const handleClick = (event: SyntheticEvent) => {
     if ((event.target as HTMLDivElement | HTMLButtonElement).classList.contains('close-modal')) {
       props.resetCharacter();
@@ -82,4 +82,4 @@ const Modal = (props: { character: Character; resetCharacter: () => void }) => {
   );
 };
 
-export default Modal;
+export default ApiInfoPage;

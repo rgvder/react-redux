@@ -10,7 +10,7 @@ import { About } from './pages/About/About';
 import { NotFound } from './pages/NotFound/NotFound';
 import Components from './pages/Components/Components';
 
-function App() {
+const App = () => {
   return (
     <div className="App">
       <Routes>
@@ -18,13 +18,16 @@ function App() {
           <Route index element={<Main />} />
           <Route path="components" element={<Components />} />
           <Route path="about" element={<About />} />
+
           <Route path="form" element={<FormPage />} />
+
           <Route path="api" element={<Api />} />
+          {/*<Route path="apiInfo" element={<ApiInfoPage character={} />} />*/}
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </div>
   );
-}
+};
 
 export default App;

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Proposal } from '../../../models/Proposal.interface';
 
 import styles from './Form.module.scss';
-import { FormProps } from '../../../models/Form.interface';
 import { FieldError, useForm } from 'react-hook-form';
+import { AppActionTypes } from '../../../models/AppState.interface';
+import { Context } from '../../AppContext/Context';
 
 const useAlert = () => {
   const [alert, setAlert] = useState(false);
@@ -19,13 +20,16 @@ const useAlert = () => {
   return { alert, showAlert };
 };
 
-const Form = (props: FormProps) => {
+const Form = () => {
+  const appContext = useContext(Context);
   const { alert, showAlert } = useAlert();
 
   const {
     register,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors, isDirty, submitCount, isValid, isSubmitSuccessful },
   } = useForm<Proposal>();
 
@@ -45,17 +49,13 @@ const Form = (props: FormProps) => {
       return true;
     }
 
-    if (!!submitCount && !isValid) {
-      return true;
-    }
-
-    return false;
+    return !!submitCount && !isValid;
   };
 
   const onSubmit = (proposal: Proposal) => {
     const url: string =
       typeof proposal.image === 'string' ? proposal.image : URL.createObjectURL(proposal.image[0]);
-    props.addProposal({
+    appContext.addProposal({
       ...proposal,
       image: url,
     });
@@ -67,6 +67,42 @@ const Form = (props: FormProps) => {
       reset();
     }
   }, [isSubmitSuccessful]);
+
+  const setValues = () => {
+    const {
+      name,
+      dateOfBirth,
+      email,
+      image,
+      price,
+      suctionPower,
+      color,
+      cleaningType,
+      deliveryTerm,
+    } = appContext.state.form;
+
+    setValue('name', name);
+    setValue('dateOfBirth', dateOfBirth);
+    setValue('email', email);
+    setValue('price', price);
+    setValue('suctionPower', suctionPower);
+    setValue('image', image);
+    setValue('color', color);
+    setValue('cleaningType', cleaningType);
+    setValue('deliveryTerm', deliveryTerm);
+  };
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      console.log(value);
+      if (value) {
+        appContext.dispatch({ type: AppActionTypes.SET_FORM_VALUE, payload: value as Proposal });
+      }
+    });
+    setValues();
+
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)} data-testid="form">
@@ -186,13 +222,14 @@ const Form = (props: FormProps) => {
             required: true,
           })}
         >
-          <option defaultValue="not mentioned" value="not mentioned">
+          <option defaultValue="Not mentioned" value="Not mentioned">
             Not mentioned
           </option>
-          <option value="very fast">Very fast</option>
-          <option value="fast">Fast</option>
+          <option value="Very fast">Very fast</option>
+          <option value="Fast">Fast</option>
         </select>
       </fieldset>
+      {addErrorMes(errors.deliveryTerm)}
       <fieldset>
         <label className={styles.text}>Upload sample product</label>
         <input

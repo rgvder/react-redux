@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './Catalog.module.scss';
 import { Card } from '../Card/Card';
-import { Item } from '../../../models/Item.interface';
+import { Context } from '../../AppContext/Context';
 
-const Catalog = (props: { items: Item[] }) => {
+const Catalog = () => {
+  const appContext = useContext(Context);
   return (
     <section className={styles.catalog}>
-      {props.items &&
-        props.items.map((item) => (
+      {appContext.state.componentItems &&
+        appContext.state.componentItems.map((item) => (
           <Card
             key={item.id}
             image={item.image}

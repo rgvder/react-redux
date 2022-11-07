@@ -1,11 +1,19 @@
-import React, { ChangeEventHandler, MouseEventHandler, useEffect, useState } from 'react';
+import React, {
+  ChangeEventHandler,
+  MouseEventHandler,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import styles from './SearchBar.module.scss';
+import { Context } from '../../AppContext/Context';
 
-const useSearchBar = (initialValue: string, props: { filterItems: (query: string) => void }) => {
+const useSearchBar = (initialValue: string) => {
+  const appContext = useContext(Context);
   const [value, setValue] = useState<string>(initialValue);
 
   const onChange: ChangeEventHandler = (event) => {
-    const input: HTMLInputElement = event.target as HTMLInputElement;
+    const input: HTMLInputElement = event?.target as HTMLInputElement;
 
     if (value !== input.value) {
       setValue(input.value);
@@ -17,7 +25,7 @@ const useSearchBar = (initialValue: string, props: { filterItems: (query: string
   };
 
   useEffect(() => {
-    props.filterItems(value);
+    appContext.filterComponentItems(value);
     localStorage.setItem('value', value);
 
     if (!localStorage.getItem('value')) {
@@ -28,10 +36,10 @@ const useSearchBar = (initialValue: string, props: { filterItems: (query: string
   return { value, onChange, onClick };
 };
 
-const SearchBar = (props: { filterItems: (query: string) => void }) => {
+const SearchBar = () => {
   const savedValue: string = localStorage.getItem('value') || '';
+  const { value, onChange, onClick } = useSearchBar(savedValue);
 
-  const { value, onChange, onClick } = useSearchBar(savedValue, props);
   return (
     <div className={styles.search}>
       <input
