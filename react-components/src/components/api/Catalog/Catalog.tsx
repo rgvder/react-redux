@@ -1,104 +1,53 @@
-import React, { MouseEventHandler, useEffect, useReducer } from 'react';
+import React, { MouseEventHandler, useContext, useEffect } from 'react';
 import styles from './Catalog.module.scss';
 import Card from '../Card/Card';
-import ApiInfoPage from '../Modal/ApiInfoPage';
-import { actionTypes, CatalogAction, CatalogState } from '../../../models/CatalogState.interface';
 import { Character } from '../../../models/Character.interface';
-import { Characters } from '../../../models/Characters.interface';
-import { BASE_PATH, SEARCH_PATH } from '../../../pages/Api/Api';
+import { BASE_PATH, SEARCH_PATH, SORTING_PATH } from '../../../pages/Api/Api';
 import Preloader from '../Preloader/Preloader';
+import { Context } from '../../AppContext/Context';
+import { AppActionTypes } from '../../../models/AppState.interface';
+import ApiInfoPage from '../Modal/ApiInfoPage';
+import Sorting from '../Sorting/Sorting';
 
-const useCatalog = (props: { searchQuery: string }) => {
-  const INITIAL_STATE: CatalogState = {
-    searchQuery: props.searchQuery || '',
-    result: {
-      info: {
-        count: 0,
-        pages: 0,
-        next: null,
-        prev: null,
-      },
-      results: [],
+const Catalog = () => {
+  const {
+    dispatch,
+    state: {
+      apiState: { result, isLoading, isError, apiSearchQuery, selectedCharacter, sorting },
     },
-    selectedCharacter: null,
-    isLoading: true,
-    isError: false,
-  };
-
-  const catalogReducer: (currentState: CatalogState, action: CatalogAction) => CatalogState = (
-    currentState: CatalogState,
-    action: CatalogAction
-  ) => {
-    switch (action.type) {
-      case actionTypes.ERROR:
-        return {
-          ...currentState,
-          isError: true,
-        };
-      case actionTypes.NO_ERROR:
-        return {
-          ...currentState,
-          isError: false,
-        };
-      case actionTypes.LOADING:
-        return {
-          ...currentState,
-          isLoading: true,
-        };
-      case actionTypes.NO_LOADING:
-        return {
-          ...currentState,
-          isLoading: false,
-        };
-      case actionTypes.FETCH_SUCCESS:
-        return {
-          ...currentState,
-          result: action.payload as Characters,
-        };
-      case actionTypes.SELECT_CHARACTER:
-        return {
-          ...currentState,
-          selectedCharacter: action.payload as Character,
-        };
-      case actionTypes.RESET_CHARACTER:
-        return {
-          ...currentState,
-          selectedCharacter: null,
-        };
-      default:
-        return currentState;
-    }
-  };
-
-  const [state, dispatchState] = useReducer(catalogReducer, INITIAL_STATE);
+  } = useContext(Context);
 
   const getCharacters = (url: string) => {
-    dispatchState({ type: actionTypes.NO_ERROR });
-    dispatchState({ type: actionTypes.LOADING });
+    dispatch({ type: AppActionTypes.API_NO_ERROR });
+    dispatch({ type: AppActionTypes.API_LOADING });
     fetch(url)
       .then((res: Response) => res.json())
       .then((result) => {
-        dispatchState({ type: actionTypes.NO_LOADING });
+        dispatch({ type: AppActionTypes.API_NO_LOADING });
 
         if (!result.error) {
-          dispatchState({ type: actionTypes.FETCH_SUCCESS, payload: result });
+          dispatch({ type: AppActionTypes.API_FETCH_SUCCESS, payload: result });
         } else {
-          dispatchState({ type: actionTypes.ERROR });
+          dispatch({ type: AppActionTypes.API_ERROR });
         }
       })
       .catch((error) => error);
   };
 
   useEffect(() => {
-    getCharacters(`${BASE_PATH}${SEARCH_PATH}${props.searchQuery}`);
-  }, [props.searchQuery]);
+    if (sorting) {
+      getCharacters(`${BASE_PATH}${SEARCH_PATH}${apiSearchQuery}${SORTING_PATH}${sorting}`);
+    } else {
+      getCharacters(`${BASE_PATH}${SEARCH_PATH}${apiSearchQuery}`);
+    }
+  }, [apiSearchQuery, sorting]);
 
   const selectCharacter = (character: Character) => {
-    dispatchState({ type: actionTypes.SELECT_CHARACTER, payload: character });
+    dispatch({ type: AppActionTypes.API_SELECT_CHARACTER, payload: character });
   };
 
   const resetCharacter = () => {
-    dispatchState({ type: actionTypes.RESET_CHARACTER });
+    dispatch({ type: AppActionTypes.API_RESET_CHARACTER });
   };
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -108,8 +57,8 @@ const useCatalog = (props: { searchQuery: string }) => {
       return;
     }
 
-    const prev = state.result.info.prev;
-    const next = state.result.info.next;
+    const prev = result.info.prev;
+    const next = result.info.next;
 
     if (prev && button.classList.contains('prev')) {
       getCharacters(prev);
@@ -120,34 +69,26 @@ const useCatalog = (props: { searchQuery: string }) => {
     }
   };
 
-  return { state, handleClick, selectCharacter, resetCharacter };
-};
-
-const Catalog = (props: { searchQuery: string }) => {
-  const { state, handleClick, selectCharacter, resetCharacter } = useCatalog(props);
-
-  const currentState: Characters = state.result;
-  const isLoading: boolean = state.isLoading;
-  const isError: boolean = state.isError;
-
   return (
     <>
       <div className={styles.buttons}>
         <button
           className={`button button_basic prev ${styles.button}`}
           onClick={handleClick}
-          disabled={!currentState?.info?.prev || isError || isLoading}
+          disabled={!result?.info?.prev || isError || isLoading}
         >
           &#8592;
         </button>
         <button
           className={`button button_basic next ${styles.button}`}
           onClick={handleClick}
-          disabled={!currentState?.info?.next || isError || isLoading}
+          disabled={!result?.info?.next || isError || isLoading}
         >
           &#8594;
         </button>
       </div>
+
+      <Sorting />
 
       {isError ? (
         <h3 className="header-text">Sorry, the data is not found</h3>
@@ -155,12 +96,12 @@ const Catalog = (props: { searchQuery: string }) => {
         <Preloader />
       ) : (
         <section className={styles.catalog}>
-          {currentState.results &&
-            currentState.results.map((item: Character) => (
+          {result.results &&
+            result.results.map((item: Character) => (
               <Card selectCharacter={selectCharacter} key={item.id} character={item} />
             ))}
-          {state.selectedCharacter && (
-            <ApiInfoPage character={state.selectedCharacter} resetCharacter={resetCharacter} />
+          {selectedCharacter && (
+            <ApiInfoPage character={selectedCharacter} resetCharacter={resetCharacter} />
           )}
         </section>
       )}

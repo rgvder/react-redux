@@ -2,16 +2,15 @@ import React, {
   KeyboardEventHandler,
   MouseEventHandler,
   SyntheticEvent,
+  useContext,
   useRef,
-  useState,
 } from 'react';
 import styles from './SearchBar.module.scss';
+import { Context } from '../../AppContext/Context';
 
-const useSearchBar = (
-  props: { addSearchQuery: (searchQuery: string) => void },
-  nameInput: React.RefObject<HTMLInputElement> | null
-) => {
-  const [value, setValue] = useState<string>('');
+const SearchBar = () => {
+  const nameInput = useRef<HTMLInputElement>(null);
+  const { addApiSearchQuery } = useContext(Context);
 
   const saveValueHandler: KeyboardEventHandler<HTMLInputElement> = (
     event: SyntheticEvent<HTMLInputElement, KeyboardEvent>
@@ -23,8 +22,7 @@ const useSearchBar = (
     }
 
     if (event.nativeEvent.code === 'Enter') {
-      setValue(nameInput.current.value);
-      props.addSearchQuery(nameInput.current.value);
+      addApiSearchQuery(nameInput.current.value);
     }
   };
 
@@ -34,16 +32,8 @@ const useSearchBar = (
     }
 
     nameInput.current.value = '';
-    setValue('');
-    props.addSearchQuery('');
+    addApiSearchQuery('');
   };
-
-  return { value, saveValueHandler, removeInputValue };
-};
-
-const SearchBar = (props: { addSearchQuery: (searchQuery: string) => void }) => {
-  const nameInput = useRef(null);
-  const { saveValueHandler, removeInputValue } = useSearchBar(props, nameInput);
 
   return (
     <div className={styles.search}>

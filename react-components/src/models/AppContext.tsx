@@ -2,6 +2,7 @@ import { AppAction, AppState } from './AppState.interface';
 import { Dispatch } from 'react';
 import { Proposal } from './Proposal.interface';
 import items from '../assets/source/items.json';
+import { apiSorting } from './ApiSorting.enum';
 
 export const INITIAL_STATE: AppState = {
   componentItems: items,
@@ -17,6 +18,22 @@ export const INITIAL_STATE: AppState = {
     deliveryTerm: 'Not mentioned',
     image: '',
   },
+  apiState: {
+    apiSearchQuery: '',
+    sorting: apiSorting.all,
+    result: {
+      info: {
+        count: 0,
+        pages: 0,
+        next: null,
+        prev: null,
+      },
+      results: [],
+    },
+    selectedCharacter: null,
+    isLoading: true,
+    isError: false,
+  },
 };
 
 export interface AppContext {
@@ -24,4 +41,5 @@ export interface AppContext {
   dispatch: Dispatch<AppAction>;
   addProposal: (proposal: Proposal) => void;
   filterComponentItems: (query: string) => void;
+  addApiSearchQuery: (searchQuery: string) => void;
 }
