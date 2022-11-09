@@ -6,7 +6,7 @@ import { BASE_PATH, SEARCH_PATH, SORTING_PATH } from '../../../pages/Api/Api';
 import Preloader from '../Preloader/Preloader';
 import { Context } from '../../AppContext/Context';
 import { AppActionTypes } from '../../../models/AppState.interface';
-import ApiInfoPage from '../Modal/ApiInfoPage';
+import ApiInfoPage from '../ApiInfoPage/ApiInfoPage';
 import Sorting from '../Sorting/Sorting';
 
 const Catalog = () => {
@@ -41,14 +41,6 @@ const Catalog = () => {
       getCharacters(`${BASE_PATH}${SEARCH_PATH}${apiSearchQuery}`);
     }
   }, [apiSearchQuery, sorting]);
-
-  const selectCharacter = (character: Character) => {
-    dispatch({ type: AppActionTypes.API_SELECT_CHARACTER, payload: character });
-  };
-
-  const resetCharacter = () => {
-    dispatch({ type: AppActionTypes.API_RESET_CHARACTER });
-  };
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     const button: HTMLButtonElement = event.target as HTMLButtonElement;
@@ -97,12 +89,7 @@ const Catalog = () => {
       ) : (
         <section className={styles.catalog}>
           {result.results &&
-            result.results.map((item: Character) => (
-              <Card selectCharacter={selectCharacter} key={item.id} character={item} />
-            ))}
-          {selectedCharacter && (
-            <ApiInfoPage character={selectedCharacter} resetCharacter={resetCharacter} />
-          )}
+            result.results.map((item: Character) => <Card key={item.id} character={item} />)}
         </section>
       )}
     </>

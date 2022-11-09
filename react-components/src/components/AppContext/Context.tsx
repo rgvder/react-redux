@@ -9,11 +9,20 @@ export const Context = createContext<AppContext>({
   addProposal: () => {},
   filterComponentItems: () => {},
   addApiSearchQuery: () => {},
+  selectCharacter: () => {},
+  resetCharacter: () => {},
 });
 
 export const ContextProvider: FC<AppProps> = (props) => {
-  const { state, dispatchState, addProposal, filterComponentItems, addApiSearchQuery } =
-    useAppReducer();
+  const {
+    state,
+    dispatchState,
+    addProposal,
+    filterComponentItems,
+    addApiSearchQuery,
+    selectCharacter,
+    resetCharacter,
+  } = useAppReducer();
 
   return (
     <Context.Provider
@@ -23,6 +32,8 @@ export const ContextProvider: FC<AppProps> = (props) => {
         addProposal: addProposal,
         filterComponentItems: filterComponentItems,
         addApiSearchQuery: addApiSearchQuery,
+        selectCharacter: selectCharacter,
+        resetCharacter: resetCharacter,
       }}
     >
       {props.children}

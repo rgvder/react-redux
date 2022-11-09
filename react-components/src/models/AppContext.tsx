@@ -3,6 +3,7 @@ import { Dispatch } from 'react';
 import { Proposal } from './Proposal.interface';
 import items from '../assets/source/items.json';
 import { apiSorting } from './ApiSorting.enum';
+import { Character } from './Character.interface';
 
 export const INITIAL_STATE: AppState = {
   componentItems: items,
@@ -42,4 +43,6 @@ export interface AppContext {
   addProposal: (proposal: Proposal) => void;
   filterComponentItems: (query: string) => void;
   addApiSearchQuery: (searchQuery: string) => void;
+  selectCharacter: (character: Character) => void;
+  resetCharacter: () => void;
 }

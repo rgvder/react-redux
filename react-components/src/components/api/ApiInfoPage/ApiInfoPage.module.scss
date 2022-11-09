@@ -1,0 +1,53 @@
+@import '../../../styles/base/constants';
+
+.modal {
+  width: 700px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  background-color: $color-meta;
+  text-align: left;
+}
+
+.image {
+  display: block;
+  width: 300px;
+  border: 2px solid $color-brand;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.main {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+
+  &__info {
+    text-align: left;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  gap: 10px;
+}
+
+.info {
+  padding-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.list {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+
+.button {
+  cursor: pointer;
+  margin-left: auto;
+  }

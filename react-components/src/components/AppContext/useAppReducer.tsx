@@ -13,6 +13,8 @@ const useAppReducer: () => {
   addProposal: (proposal: Proposal) => void;
   filterComponentItems: (query: string) => void;
   addApiSearchQuery: (searchQuery: string) => void;
+  selectCharacter: (character: Character) => void;
+  resetCharacter: () => void;
 } = () => {
   const appReducer: (currentState: AppState, action: AppAction) => AppState = (
     currentState: AppState,
@@ -135,7 +137,23 @@ const useAppReducer: () => {
     dispatchState({ type: AppActionTypes.API_SET_SEARCHBAR_VALUE, payload: searchQuery });
   };
 
-  return { state, dispatchState, addProposal, filterComponentItems, addApiSearchQuery };
+  const selectCharacter = (character: Character) => {
+    dispatchState({ type: AppActionTypes.API_SELECT_CHARACTER, payload: character });
+  };
+
+  const resetCharacter = () => {
+    dispatchState({ type: AppActionTypes.API_RESET_CHARACTER });
+  };
+
+  return {
+    state,
+    dispatchState,
+    addProposal,
+    filterComponentItems,
+    addApiSearchQuery,
+    selectCharacter,
+    resetCharacter,
+  };
 };
 
 export default useAppReducer;

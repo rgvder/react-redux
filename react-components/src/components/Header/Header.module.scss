@@ -6,7 +6,6 @@
 
 .wrapper {
   display: flex;
-  justify-content: center;
   align-items: center;
   padding-top: 30px;
   padding-bottom: 30px;
@@ -15,4 +14,8 @@
 .nav {
   display: flex;
   gap: 30px;
+}
+
+.invisible {
+  display: none;
 }
