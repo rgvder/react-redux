@@ -31,6 +31,11 @@ export const INITIAL_STATE: AppState = {
       },
       results: [],
     },
+    pagination: {
+      cardPerPage: 20,
+      count: 0,
+      pages: 0,
+    },
     selectedCharacter: null,
     isLoading: true,
     isError: false,
@@ -45,4 +50,5 @@ export interface AppContext {
   addApiSearchQuery: (searchQuery: string) => void;
   selectCharacter: (character: Character) => void;
   resetCharacter: () => void;
+  getCharacters: (url: string, segment?: number) => void;
 }

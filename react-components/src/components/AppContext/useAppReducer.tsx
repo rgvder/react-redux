@@ -15,6 +15,7 @@ const useAppReducer: () => {
   addApiSearchQuery: (searchQuery: string) => void;
   selectCharacter: (character: Character) => void;
   resetCharacter: () => void;
+  getCharacters: (url: string, segment?: number) => void;
 } = () => {
   const appReducer: (currentState: AppState, action: AppAction) => AppState = (
     currentState: AppState,
@@ -69,11 +70,12 @@ const useAppReducer: () => {
           },
         };
       case AppActionTypes.API_FETCH_SUCCESS:
+        const fetchPayload: Characters = action.payload as Characters;
         return {
           ...currentState,
           apiState: {
             ...currentState.apiState,
-            result: action.payload as Characters,
+            result: fetchPayload,
           },
         };
       case AppActionTypes.API_SELECT_CHARACTER:
@@ -108,6 +110,35 @@ const useAppReducer: () => {
             sorting: action.payload as apiSorting,
           },
         };
+      case AppActionTypes.API_SET_PAGES:
+        const PaginationPayload: number = action.payload as number;
+
+        return {
+          ...currentState,
+          apiState: {
+            ...currentState.apiState,
+            pagination: {
+              ...currentState.apiState.pagination,
+              cardPerPage: PaginationPayload,
+              pages: Math.ceil(currentState.apiState.pagination.count / PaginationPayload),
+            },
+          },
+        };
+      case AppActionTypes.API_FIRST_SET_PAGES:
+        return {
+          ...currentState,
+          apiState: {
+            ...currentState.apiState,
+            pagination: {
+              ...currentState.apiState.pagination,
+              count: action.payload as number,
+              pages: Math.ceil(
+                currentState.apiState.pagination.count /
+                  currentState.apiState.pagination.cardPerPage
+              ),
+            },
+          },
+        };
       default:
         return currentState;
     }
@@ -137,6 +168,42 @@ const useAppReducer: () => {
     dispatchState({ type: AppActionTypes.API_SET_SEARCHBAR_VALUE, payload: searchQuery });
   };
 
+  const getCharacters = (url: string, segment?: number) => {
+    const { count } = state.apiState.pagination;
+
+    dispatchState({ type: AppActionTypes.API_NO_ERROR });
+    dispatchState({ type: AppActionTypes.API_LOADING });
+    fetch(url)
+      .then((res: Response) => res.json())
+      .then((result) => {
+        dispatchState({ type: AppActionTypes.API_NO_LOADING });
+
+        if (!result.error) {
+          if (!count) {
+            dispatchState({ type: AppActionTypes.API_FIRST_SET_PAGES, payload: result.info.count });
+          }
+
+          if (segment) {
+            const { cardPerPage } = state.apiState.pagination;
+            const newResults: Characters[] = result.results.slice(
+              segment * cardPerPage - cardPerPage,
+              segment * cardPerPage
+            );
+
+            dispatchState({
+              type: AppActionTypes.API_FETCH_SUCCESS,
+              payload: { ...result, results: newResults },
+            });
+          } else {
+            dispatchState({ type: AppActionTypes.API_FETCH_SUCCESS, payload: result });
+          }
+        } else {
+          dispatchState({ type: AppActionTypes.API_ERROR });
+        }
+      })
+      .catch((error) => error);
+  };
+
   const selectCharacter = (character: Character) => {
     dispatchState({ type: AppActionTypes.API_SELECT_CHARACTER, payload: character });
   };
@@ -153,6 +220,7 @@ const useAppReducer: () => {
     addApiSearchQuery,
     selectCharacter,
     resetCharacter,
+    getCharacters,
   };
 };
 

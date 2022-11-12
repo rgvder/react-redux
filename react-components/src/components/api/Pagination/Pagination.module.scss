@@ -1,0 +1,58 @@
+@import '../../../styles/base/constants';
+
+.pagination {
+  display: flex;
+  gap: 60px;
+}
+
+.wrapper {
+  display: flex;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  cursor: pointer;
+  padding: 0 15px;
+  border: 1px solid $color-brand;
+  border-right: none;
+  @include font(normal, 400, 1.2rem, 314%);
+  letter-spacing: 0.5px;
+  color: $color-brand;
+  background-color: $color-meta;
+
+  transition: all .2s linear;
+
+  &:hover {
+    color: $color-meta;
+    background-color: $color-brand;
+  }
+}
+
+.active {
+  color: $color-meta;
+  background-color: $color-brand;
+}
+
+.previous {
+  border-radius: 4px 0 0 4px;
+}
+
+.next {
+  border-radius: 0 4px 4px 0;
+  border-right: 1px solid $color-brand;
+}
+
+.disabled {
+  cursor: auto;
+  color: $color-additional;
+  border: 1px solid $color-additional;
+
+  &:hover {
+    color: $color-additional;
+    border: 1px solid $color-additional;
+    background-color: $color-meta;
+  }
+}

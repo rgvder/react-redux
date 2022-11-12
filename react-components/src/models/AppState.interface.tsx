@@ -30,9 +30,11 @@ export enum AppActionTypes {
   API_RESET_CHARACTER = 'API_RESET_CHARACTER',
   API_SET_SEARCHBAR_VALUE = 'API_SET_SEARCHBAR_VALUE',
   API_SET_SORTING_VALUE = 'API_SET_SORTING_VALUE',
+  API_SET_PAGES = 'API_SET_PAGES',
+  API_FIRST_SET_PAGES = 'API_FIRST_SET_PAGES',
 }
 
 export interface AppAction {
   type: AppActionTypes;
-  payload?: Proposal | Proposal[] | Item[] | Characters | Character | string | apiSorting;
+  payload?: Proposal | Proposal[] | Item[] | Characters | Character | string | apiSorting | number;
 }

@@ -11,6 +11,7 @@ export const Context = createContext<AppContext>({
   addApiSearchQuery: () => {},
   selectCharacter: () => {},
   resetCharacter: () => {},
+  getCharacters: () => {},
 });
 
 export const ContextProvider: FC<AppProps> = (props) => {
@@ -22,6 +23,7 @@ export const ContextProvider: FC<AppProps> = (props) => {
     addApiSearchQuery,
     selectCharacter,
     resetCharacter,
+    getCharacters,
   } = useAppReducer();
 
   return (
@@ -34,6 +36,7 @@ export const ContextProvider: FC<AppProps> = (props) => {
         addApiSearchQuery: addApiSearchQuery,
         selectCharacter: selectCharacter,
         resetCharacter: resetCharacter,
+        getCharacters: getCharacters,
       }}
     >
       {props.children}

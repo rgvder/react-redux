@@ -6,7 +6,6 @@ import { Link, useParams } from 'react-router-dom';
 
 const Card = (props: { character: Character }) => {
   const { selectCharacter } = useContext(Context);
-  const { id } = useParams();
 
   const handleClick = () => {
     selectCharacter(props.character);
