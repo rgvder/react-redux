@@ -35,6 +35,7 @@ export const INITIAL_STATE: AppState = {
       cardPerPage: 20,
       count: 0,
       pages: 0,
+      forcePage: 0,
     },
     selectedCharacter: null,
     isLoading: true,

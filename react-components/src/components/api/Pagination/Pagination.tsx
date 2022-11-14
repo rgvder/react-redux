@@ -11,12 +11,11 @@ const Pagination = () => {
   const {
     getCharacters,
     dispatch,
-    state,
     state: {
       apiState: {
         sorting,
         apiSearchQuery,
-        pagination: { pages, cardPerPage },
+        pagination: { pages, cardPerPage, forcePage },
       },
     },
   } = useContext(Context);
@@ -26,7 +25,12 @@ const Pagination = () => {
   };
 
   useEffect(() => {
-    getCharacters(`${BASE_PATH}?${PAGINATION_PATH}1`, 1);
+    getCharacters(
+      `${BASE_PATH}?${PAGINATION_PATH}1${apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''}${
+        sorting ? '&' + SORTING_PATH + sorting : ''
+      }`,
+      1
+    );
   }, [cardPerPage]);
 
   const handlePageChange = (currentPage: { selected: number }) => {
@@ -43,7 +47,7 @@ const Pagination = () => {
       segment
     );
 
-    console.log(state);
+    dispatch({ type: AppActionTypes.API_SET_FORCE_PAGE, payload: currentPage.selected });
   };
 
   return (
@@ -64,11 +68,14 @@ const Pagination = () => {
           pageCount={pages}
           containerClassName={styles.wrapper}
           pageClassName={styles.item}
+          pageLinkClassName={styles.link}
           activeClassName={styles.active}
           previousClassName={`${styles.item} ${styles.previous}`}
           nextClassName={`${styles.item} ${styles.next}`}
           breakClassName={styles.item}
+          breakLinkClassName={styles.link}
           disabledClassName={styles.disabled}
+          forcePage={forcePage}
         />
       </div>
     </>

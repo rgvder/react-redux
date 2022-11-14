@@ -76,6 +76,13 @@ const useAppReducer: () => {
           apiState: {
             ...currentState.apiState,
             result: fetchPayload,
+            pagination: {
+              ...currentState.apiState.pagination,
+              count: fetchPayload.info.count as number,
+              pages: Math.ceil(
+                (fetchPayload.info.count as number) / currentState.apiState.pagination.cardPerPage
+              ),
+            },
           },
         };
       case AppActionTypes.API_SELECT_CHARACTER:
@@ -100,6 +107,10 @@ const useAppReducer: () => {
           apiState: {
             ...currentState.apiState,
             apiSearchQuery: action.payload as string,
+            pagination: {
+              ...currentState.apiState.pagination,
+              forcePage: 0,
+            },
           },
         };
       case AppActionTypes.API_SET_SORTING_VALUE:
@@ -108,6 +119,10 @@ const useAppReducer: () => {
           apiState: {
             ...currentState.apiState,
             sorting: action.payload as apiSorting,
+            pagination: {
+              ...currentState.apiState.pagination,
+              forcePage: 0,
+            },
           },
         };
       case AppActionTypes.API_SET_PAGES:
@@ -121,6 +136,7 @@ const useAppReducer: () => {
               ...currentState.apiState.pagination,
               cardPerPage: PaginationPayload,
               pages: Math.ceil(currentState.apiState.pagination.count / PaginationPayload),
+              forcePage: 0,
             },
           },
         };
@@ -136,6 +152,17 @@ const useAppReducer: () => {
                 currentState.apiState.pagination.count /
                   currentState.apiState.pagination.cardPerPage
               ),
+            },
+          },
+        };
+      case AppActionTypes.API_SET_FORCE_PAGE:
+        return {
+          ...currentState,
+          apiState: {
+            ...currentState.apiState,
+            pagination: {
+              ...currentState.apiState.pagination,
+              forcePage: action.payload as number,
             },
           },
         };

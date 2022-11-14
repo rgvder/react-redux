@@ -2,7 +2,7 @@ import React, { Component, useContext } from 'react';
 import styles from './Card.module.scss';
 import { Character } from '../../../models/Character.interface';
 import { Context } from '../../AppContext/Context';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Card = (props: { character: Character }) => {
   const { selectCharacter } = useContext(Context);
