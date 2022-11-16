@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import styles from './SearchBar.module.scss';
 import { Context } from '../../AppContext/Context';
-import { AppActionTypes } from '../../../models/AppState.interface';
+import { AppActionTypes } from '../../../models/AppState';
 
 const SearchBar = () => {
   const nameInput = useRef<HTMLInputElement>(null);

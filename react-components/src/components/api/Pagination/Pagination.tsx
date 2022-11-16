@@ -2,7 +2,7 @@ import React, { ChangeEventHandler, useContext, useEffect } from 'react';
 import styles from './Pagination.module.scss';
 import { Context } from '../../AppContext/Context';
 import ReactPaginate from 'react-paginate';
-import { AppActionTypes } from '../../../models/AppState.interface';
+import { AppActionTypes } from '../../../models/AppState';
 import {
   API_COUNT,
   BASE_PATH,
@@ -26,16 +26,15 @@ const Pagination = () => {
 
   const changePageCount: ChangeEventHandler<HTMLSelectElement> = (event) => {
     dispatch({ type: AppActionTypes.API_SET_PAGES, payload: +event.target.value });
-  };
 
-  useEffect(() => {
     getCharacters(
       `${BASE_PATH}?${PAGINATION_PATH}${apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''}${
         sorting ? '&' + SORTING_PATH + sorting : ''
       }`,
-      1
+      1,
+      +event.target.value
     );
-  }, [cardPerPage]);
+  };
 
   const handlePageChange = (currentPage: { selected: number }) => {
     const pageNum = currentPage.selected + 1;
@@ -75,7 +74,9 @@ const Pagination = () => {
           pageLinkClassName={styles.link}
           activeClassName={styles.active}
           previousClassName={`${styles.item} ${styles.previous}`}
+          previousLinkClassName={styles.link}
           nextClassName={`${styles.item} ${styles.next}`}
+          nextLinkClassName={styles.link}
           breakClassName={styles.item}
           breakLinkClassName={styles.link}
           disabledClassName={styles.disabled}

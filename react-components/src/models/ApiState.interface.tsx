@@ -4,6 +4,7 @@ import { apiSorting } from './ApiSorting.enum';
 import { Pagination } from './Pagination.interface';
 
 export interface ApiState {
+  isInitialLoading: boolean;
   apiSearchQuery: string;
   sorting: apiSorting.all | apiSorting.alive | apiSorting.dead | apiSorting.unknown;
   result: Characters;

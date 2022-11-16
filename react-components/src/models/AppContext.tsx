@@ -1,4 +1,4 @@
-import { AppAction, AppState } from './AppState.interface';
+import { AppAction, AppState } from './AppState';
 import { Dispatch } from 'react';
 import items from '../assets/source/items.json';
 import { apiSorting } from './ApiSorting.enum';
@@ -18,6 +18,7 @@ export const INITIAL_STATE: AppState = {
     image: '',
   },
   apiState: {
+    isInitialLoading: true,
     apiSearchQuery: '',
     sorting: apiSorting.all,
     result: {
@@ -35,7 +36,7 @@ export const INITIAL_STATE: AppState = {
       pages: 0,
       forcePage: 0,
       segment: 1,
-      apiPage: 0,
+      apiPage: 1,
     },
     selectedCharacter: null,
     isLoading: true,
@@ -46,5 +47,5 @@ export const INITIAL_STATE: AppState = {
 export interface AppContext {
   state: AppState;
   dispatch: Dispatch<AppAction>;
-  getCharacters: (url: string, segment?: number) => void;
+  getCharacters: (url: string, segment?: number, cardPerPage?: number) => void;
 }

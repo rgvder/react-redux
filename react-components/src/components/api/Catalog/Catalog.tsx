@@ -12,9 +12,11 @@ import Preloader from '../Preloader/Preloader';
 import { Context } from '../../AppContext/Context';
 import Sorting from '../Sorting/Sorting';
 import Pagination from '../Pagination/Pagination';
+import { AppActionTypes } from '../../../models/AppState';
 
 const Catalog = () => {
   const {
+    dispatch,
     getCharacters,
     state: {
       apiState: {
@@ -23,6 +25,7 @@ const Catalog = () => {
         isError,
         apiSearchQuery,
         sorting,
+        isInitialLoading,
         pagination: { segment, apiPage },
       },
     },
@@ -30,11 +33,17 @@ const Catalog = () => {
 
   useEffect(() => {
     getCharacters(
-      `${BASE_PATH}?${PAGINATION_PATH}${apiPage}&${SEARCH_PATH}${apiSearchQuery}${
-        sorting ? '&' + SORTING_PATH + sorting : ''
-      }`,
-      segment
+      `${BASE_PATH}?${PAGINATION_PATH}${isInitialLoading ? apiPage : ''}${
+        apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
+      }${sorting ? '&' + SORTING_PATH + sorting : ''}`,
+      isInitialLoading ? segment : 1
     );
+
+    dispatch({ type: AppActionTypes.API_SET_INITIAL_LOADING, payload: false });
+
+    return () => {
+      dispatch({ type: AppActionTypes.API_SET_INITIAL_LOADING, payload: true });
+    };
   }, [apiSearchQuery, sorting]);
 
   return (

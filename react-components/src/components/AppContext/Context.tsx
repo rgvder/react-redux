@@ -1,7 +1,7 @@
 import { createContext, FC } from 'react';
 import { AppContext, INITIAL_STATE } from '../../models/AppContext';
 import useAppReducer from './useAppReducer';
-import { AppProps } from '../../models/AppState.interface';
+import { AppProps } from '../../models/AppState';
 
 export const Context = createContext<AppContext>({
   state: INITIAL_STATE,

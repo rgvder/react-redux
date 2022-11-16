@@ -35,9 +35,19 @@ export enum AppActionTypes {
   API_SET_FORCE_PAGE = 'API_SET_FORCE_PAGE',
   API_SET_SEGMENT = 'API_SET_SEGMENT',
   API_SET_PAGE = 'API_SET_PAGE',
+  API_SET_INITIAL_LOADING = 'API_SET_INITIAL_LOADING',
 }
 
 export interface AppAction {
   type: AppActionTypes;
-  payload?: Proposal | Proposal[] | Item[] | Characters | Character | string | apiSorting | number;
+  payload?:
+    | Proposal
+    | Proposal[]
+    | Item[]
+    | Characters
+    | Character
+    | string
+    | apiSorting
+    | number
+    | boolean;
 }

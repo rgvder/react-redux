@@ -1,4 +1,4 @@
-import { AppAction, AppActionTypes, AppState } from '../../models/AppState.interface';
+import { AppAction, AppActionTypes, AppState } from '../../models/AppState';
 import { Dispatch, useReducer } from 'react';
 import { Proposal } from '../../models/Proposal.interface';
 import { INITIAL_STATE } from '../../models/AppContext';
@@ -34,6 +34,7 @@ const useAppReducer: () => {
       API_SET_SORTING_VALUE,
       API_SET_SEGMENT,
       API_SET_PAGE,
+      API_SET_INITIAL_LOADING,
     } = AppActionTypes;
 
     switch (action.type) {
@@ -137,6 +138,7 @@ const useAppReducer: () => {
             pagination: {
               ...currentState.apiState.pagination,
               forcePage: 0,
+              segment: 1,
             },
           },
         };
@@ -164,8 +166,7 @@ const useAppReducer: () => {
               ...currentState.apiState.pagination,
               count: action.payload as number,
               pages: Math.ceil(
-                currentState.apiState.pagination.count /
-                  currentState.apiState.pagination.cardPerPage
+                (action.payload as number) / currentState.apiState.pagination.cardPerPage
               ),
             },
           },
@@ -203,6 +204,14 @@ const useAppReducer: () => {
             },
           },
         };
+      case API_SET_INITIAL_LOADING:
+        return {
+          ...currentState,
+          apiState: {
+            ...currentState.apiState,
+            isInitialLoading: action.payload as boolean,
+          },
+        };
       default:
         return currentState;
     }
@@ -210,8 +219,9 @@ const useAppReducer: () => {
 
   const [state, dispatchState] = useReducer(appReducer, INITIAL_STATE);
 
-  const getCharacters = (url: string, segment?: number) => {
-    const { count } = state.apiState.pagination;
+  const getCharacters = (url: string, segment?: number, characterPerPage?: number) => {
+    const { count, cardPerPage } = state.apiState.pagination;
+    const cardPerCurrentPage = characterPerPage ? characterPerPage : cardPerPage;
 
     dispatchState({ type: AppActionTypes.API_NO_ERROR });
     dispatchState({ type: AppActionTypes.API_LOADING });
@@ -226,10 +236,9 @@ const useAppReducer: () => {
           }
 
           if (segment) {
-            const { cardPerPage } = state.apiState.pagination;
             const newResults: Character[] = result.results.slice(
-              segment * cardPerPage - cardPerPage,
-              segment * cardPerPage
+              segment * cardPerCurrentPage - cardPerCurrentPage,
+              segment * cardPerCurrentPage
             );
 
             dispatchState({

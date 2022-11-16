@@ -3,7 +3,7 @@ import { Proposal } from '../../../models/Proposal.interface';
 
 import styles from './Form.module.scss';
 import { FieldError, useForm } from 'react-hook-form';
-import { AppActionTypes } from '../../../models/AppState.interface';
+import { AppActionTypes } from '../../../models/AppState';
 import { Context } from '../../AppContext/Context';
 import useAlert from './useAlert';
 

@@ -2,7 +2,7 @@ import React, { useContext, useRef } from 'react';
 import styles from './Sorting.module.scss';
 import { Context } from '../../AppContext/Context';
 import { apiSorting } from '../../../models/ApiSorting.enum';
-import { AppActionTypes } from '../../../models/AppState.interface';
+import { AppActionTypes } from '../../../models/AppState';
 
 const Sorting = () => {
   const sortingFieldSet = useRef<HTMLFieldSetElement>(null);

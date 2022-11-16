@@ -3,7 +3,7 @@ import styles from './Card.module.scss';
 import { Context } from '../../AppContext/Context';
 import { Link } from 'react-router-dom';
 import { ApiCardProps } from '../../../models/ApiCardProps.interface';
-import { AppActionTypes } from '../../../models/AppState.interface';
+import { AppActionTypes } from '../../../models/AppState';
 
 const Card: FC<ApiCardProps> = (props) => {
   const { dispatch } = useContext(Context);

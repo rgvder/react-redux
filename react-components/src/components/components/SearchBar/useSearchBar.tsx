@@ -1,6 +1,6 @@
 import { ChangeEventHandler, MouseEventHandler, useContext, useEffect, useState } from 'react';
 import { Context } from '../../AppContext/Context';
-import { AppActionTypes } from '../../../models/AppState.interface';
+import { AppActionTypes } from '../../../models/AppState';
 import items from '../../../assets/source/items.json';
 import { Item } from '../../../models/Item.interface';
 

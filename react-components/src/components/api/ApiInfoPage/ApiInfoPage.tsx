@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styles from './ApiInfoPage.module.scss';
 import { Context } from '../../AppContext/Context';
 import { useNavigate } from 'react-router-dom';
-import { AppActionTypes } from '../../../models/AppState.interface';
+import { AppActionTypes } from '../../../models/AppState';
 
 const ApiInfoPage = () => {
   const {
