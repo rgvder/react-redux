@@ -118,7 +118,6 @@ const useAppReducer: () => {
           },
         };
       case API_SET_SEARCHBAR_VALUE:
-        console.log(currentState?.apiState?.pagination?.segment);
         return {
           ...currentState,
           apiState: {
@@ -187,8 +186,6 @@ const useAppReducer: () => {
           },
         };
       case API_SET_SEGMENT:
-        console.log(action.payload);
-
         return {
           ...currentState,
           apiState: {
