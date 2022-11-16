@@ -1,9 +1,7 @@
 import { AppAction, AppState } from './AppState.interface';
 import { Dispatch } from 'react';
-import { Proposal } from './Proposal.interface';
 import items from '../assets/source/items.json';
 import { apiSorting } from './ApiSorting.enum';
-import { Character } from './Character.interface';
 
 export const INITIAL_STATE: AppState = {
   componentItems: items,
@@ -36,6 +34,8 @@ export const INITIAL_STATE: AppState = {
       count: 0,
       pages: 0,
       forcePage: 0,
+      segment: 1,
+      apiPage: 0,
     },
     selectedCharacter: null,
     isLoading: true,
@@ -46,10 +46,5 @@ export const INITIAL_STATE: AppState = {
 export interface AppContext {
   state: AppState;
   dispatch: Dispatch<AppAction>;
-  addProposal: (proposal: Proposal) => void;
-  filterComponentItems: (query: string) => void;
-  addApiSearchQuery: (searchQuery: string) => void;
-  selectCharacter: (character: Character) => void;
-  resetCharacter: () => void;
   getCharacters: (url: string, segment?: number) => void;
 }

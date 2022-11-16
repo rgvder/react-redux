@@ -3,9 +3,13 @@ import styles from './Pagination.module.scss';
 import { Context } from '../../AppContext/Context';
 import ReactPaginate from 'react-paginate';
 import { AppActionTypes } from '../../../models/AppState.interface';
-import { BASE_PATH, PAGINATION_PATH, SEARCH_PATH, SORTING_PATH } from '../../../pages/Api/Api';
-
-export const API_COUNT = 20;
+import {
+  API_COUNT,
+  BASE_PATH,
+  PAGINATION_PATH,
+  SEARCH_PATH,
+  SORTING_PATH,
+} from '../../../models/ApiConstants';
 
 const Pagination = () => {
   const {
@@ -26,7 +30,7 @@ const Pagination = () => {
 
   useEffect(() => {
     getCharacters(
-      `${BASE_PATH}?${PAGINATION_PATH}1${apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''}${
+      `${BASE_PATH}?${PAGINATION_PATH}${apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''}${
         sorting ? '&' + SORTING_PATH + sorting : ''
       }`,
       1
@@ -48,15 +52,15 @@ const Pagination = () => {
     );
 
     dispatch({ type: AppActionTypes.API_SET_FORCE_PAGE, payload: currentPage.selected });
+    dispatch({ type: AppActionTypes.API_SET_SEGMENT, payload: segment });
+    dispatch({ type: AppActionTypes.API_SET_PAGE, payload: apiPage });
   };
 
   return (
     <>
       <div className={styles.pagination}>
-        <select className={styles.select} onChange={changePageCount}>
-          <option value="20" defaultChecked>
-            20
-          </option>
+        <select className={styles.select} onChange={changePageCount} value={cardPerPage}>
+          <option value="20">20</option>
           <option value="10">10</option>
           <option value="5">5</option>
         </select>

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styles from './InfoCard.module.scss';
 import { Proposal } from '../../../models/Proposal.interface';
 
-export const InfoCard = (props: Proposal) => {
+export const InfoCard: FC<Proposal> = (props) => {
   return (
     <article className={styles.infoCard}>
       <img className={styles.image} src={props.image as string} alt={`${props.name}`} />

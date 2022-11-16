@@ -1,18 +1,26 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import styles from './Sorting.module.scss';
 import { Context } from '../../AppContext/Context';
 import { apiSorting } from '../../../models/ApiSorting.enum';
 import { AppActionTypes } from '../../../models/AppState.interface';
 
 const Sorting = () => {
-  const { dispatch } = useContext(Context);
+  const sortingFieldSet = useRef<HTMLFieldSetElement>(null);
+  const {
+    dispatch,
+    state: {
+      apiState: { sorting },
+    },
+  } = useContext(Context);
+
+  sortingFieldSet?.current?.elements?.namedItem(sorting)?.setAttribute('checked', 'checked');
 
   const handleClick = (sortingType: apiSorting) => {
     dispatch({ type: AppActionTypes.API_SET_SORTING_VALUE, payload: sortingType });
   };
 
   return (
-    <div className={styles.sorting}>
+    <fieldset className={styles.sorting} name="sorting" ref={sortingFieldSet}>
       <div className={styles.wrapper}>
         <input
           className={styles.input}
@@ -69,7 +77,7 @@ const Sorting = () => {
           Unknown
         </label>
       </div>
-    </div>
+    </fieldset>
   );
 };
 

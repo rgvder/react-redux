@@ -4,12 +4,14 @@ import Catalog from '../../components/components/Catalog/Catalog';
 import { Context } from '../../components/AppContext/Context';
 
 const Components = () => {
-  const appContext = useContext(Context);
+  const {
+    state: { componentItems },
+  } = useContext(Context);
 
   return (
     <>
       <SearchBar />
-      {appContext.state.componentItems.length ? (
+      {componentItems.length ? (
         <Catalog />
       ) : (
         <p className="text">Nothing was found according to your request.</p>

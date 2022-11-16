@@ -1,40 +1,6 @@
-import React, {
-  ChangeEventHandler,
-  MouseEventHandler,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React from 'react';
 import styles from './SearchBar.module.scss';
-import { Context } from '../../AppContext/Context';
-
-const useSearchBar = (initialValue: string) => {
-  const appContext = useContext(Context);
-  const [value, setValue] = useState<string>(initialValue);
-
-  const onChange: ChangeEventHandler = (event) => {
-    const input: HTMLInputElement = event?.target as HTMLInputElement;
-
-    if (value !== input.value) {
-      setValue(input.value);
-    }
-  };
-
-  const onClick: MouseEventHandler = () => {
-    setValue('');
-  };
-
-  useEffect(() => {
-    appContext.filterComponentItems(value);
-    localStorage.setItem('value', value);
-
-    if (!localStorage.getItem('value')) {
-      localStorage.removeItem('value');
-    }
-  }, [value]);
-
-  return { value, onChange, onClick };
-};
+import useSearchBar from './useSearchBar';
 
 const SearchBar = () => {
   const savedValue: string = localStorage.getItem('value') || '';

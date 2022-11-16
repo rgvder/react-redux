@@ -2,10 +2,11 @@ import React, { useContext } from 'react';
 import styles from './ApiInfoPage.module.scss';
 import { Context } from '../../AppContext/Context';
 import { useNavigate } from 'react-router-dom';
+import { AppActionTypes } from '../../../models/AppState.interface';
 
 const ApiInfoPage = () => {
   const {
-    resetCharacter,
+    dispatch,
     state: {
       apiState: { selectedCharacter },
     },
@@ -15,7 +16,7 @@ const ApiInfoPage = () => {
 
   const handleClick = () => {
     navigate(-1);
-    resetCharacter();
+    dispatch({ type: AppActionTypes.API_RESET_CHARACTER });
   };
 
   const episode: string[] | undefined = selectedCharacter?.episode.map((item: string) =>

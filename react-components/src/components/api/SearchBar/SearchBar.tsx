@@ -7,22 +7,31 @@ import React, {
 } from 'react';
 import styles from './SearchBar.module.scss';
 import { Context } from '../../AppContext/Context';
+import { AppActionTypes } from '../../../models/AppState.interface';
 
 const SearchBar = () => {
   const nameInput = useRef<HTMLInputElement>(null);
-  const { addApiSearchQuery } = useContext(Context);
+  const {
+    dispatch,
+    state: {
+      apiState: { apiSearchQuery },
+    },
+  } = useContext(Context);
+
+  if (apiSearchQuery && nameInput.current) {
+    nameInput.current.value = apiSearchQuery;
+  }
 
   const saveValueHandler: KeyboardEventHandler<HTMLInputElement> = (
     event: SyntheticEvent<HTMLInputElement, KeyboardEvent>
   ) => {
     event.preventDefault();
 
-    if (!nameInput?.current) {
-      return;
-    }
-
     if (event.nativeEvent.code === 'Enter') {
-      addApiSearchQuery(nameInput.current.value);
+      dispatch({
+        type: AppActionTypes.API_SET_SEARCHBAR_VALUE,
+        payload: nameInput?.current?.value,
+      });
     }
   };
 
@@ -32,7 +41,7 @@ const SearchBar = () => {
     }
 
     nameInput.current.value = '';
-    addApiSearchQuery('');
+    dispatch({ type: AppActionTypes.API_SET_SEARCHBAR_VALUE, payload: '' });
   };
 
   return (

@@ -33,6 +33,8 @@ export enum AppActionTypes {
   API_SET_PAGES = 'API_SET_PAGES',
   API_FIRST_SET_PAGES = 'API_FIRST_SET_PAGES',
   API_SET_FORCE_PAGE = 'API_SET_FORCE_PAGE',
+  API_SET_SEGMENT = 'API_SET_SEGMENT',
+  API_SET_PAGE = 'API_SET_PAGE',
 }
 
 export interface AppAction {

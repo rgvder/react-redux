@@ -1,14 +1,15 @@
-import React, { Component, useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import styles from './Card.module.scss';
-import { Character } from '../../../models/Character.interface';
 import { Context } from '../../AppContext/Context';
 import { Link } from 'react-router-dom';
+import { ApiCardProps } from '../../../models/ApiCardProps.interface';
+import { AppActionTypes } from '../../../models/AppState.interface';
 
-const Card = (props: { character: Character }) => {
-  const { selectCharacter } = useContext(Context);
+const Card: FC<ApiCardProps> = (props) => {
+  const { dispatch } = useContext(Context);
 
   const handleClick = () => {
-    selectCharacter(props.character);
+    dispatch({ type: AppActionTypes.API_SELECT_CHARACTER, payload: props.character });
   };
 
   return (

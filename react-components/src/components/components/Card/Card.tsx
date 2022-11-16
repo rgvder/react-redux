@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styles from './Card.module.scss';
 import { Item } from '../../../models/Item.interface';
 import Rating from './Rating/Rating';
 import ButtonBasket from './ButtonBasket/ButtonBasket';
 import ButtonFavorite from './ButtonFavorite/ButtonFavorite';
 
-export const Card = (props: Item) => {
+export const Card: FC<Item> = (props) => {
   return (
     <article className={styles.card} data-testid="card">
       <img className={styles.image} src={props.image} alt={`${props.model}`} />

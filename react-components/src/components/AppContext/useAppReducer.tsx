@@ -10,34 +10,49 @@ import { apiSorting } from '../../models/ApiSorting.enum';
 const useAppReducer: () => {
   state: AppState;
   dispatchState: Dispatch<AppAction>;
-  addProposal: (proposal: Proposal) => void;
-  filterComponentItems: (query: string) => void;
-  addApiSearchQuery: (searchQuery: string) => void;
-  selectCharacter: (character: Character) => void;
-  resetCharacter: () => void;
   getCharacters: (url: string, segment?: number) => void;
 } = () => {
   const appReducer: (currentState: AppState, action: AppAction) => AppState = (
     currentState: AppState,
     action: AppAction
   ) => {
+    const {
+      SET_COMPONENTS_VALUE,
+      SET_FORM_VALUE,
+      SET_PROPOSAL,
+      API_ERROR,
+      API_NO_ERROR,
+      API_LOADING,
+      API_NO_LOADING,
+      API_FETCH_SUCCESS,
+      API_SELECT_CHARACTER,
+      API_RESET_CHARACTER,
+      API_SET_SEARCHBAR_VALUE,
+      API_SET_PAGES,
+      API_FIRST_SET_PAGES,
+      API_SET_FORCE_PAGE,
+      API_SET_SORTING_VALUE,
+      API_SET_SEGMENT,
+      API_SET_PAGE,
+    } = AppActionTypes;
+
     switch (action.type) {
-      case AppActionTypes.SET_COMPONENTS_VALUE:
+      case SET_COMPONENTS_VALUE:
         return {
           ...currentState,
           componentItems: action.payload as Item[],
         };
-      case AppActionTypes.SET_FORM_VALUE:
+      case SET_FORM_VALUE:
         return {
           ...currentState,
           form: action.payload as Proposal,
         };
-      case AppActionTypes.SET_PROPOSAL:
+      case SET_PROPOSAL:
         return {
           ...currentState,
           proposals: action.payload as Proposal[],
         };
-      case AppActionTypes.API_ERROR:
+      case API_ERROR:
         return {
           ...currentState,
           apiState: {
@@ -45,7 +60,7 @@ const useAppReducer: () => {
             isError: true,
           },
         };
-      case AppActionTypes.API_NO_ERROR:
+      case API_NO_ERROR:
         return {
           ...currentState,
           apiState: {
@@ -53,7 +68,7 @@ const useAppReducer: () => {
             isError: false,
           },
         };
-      case AppActionTypes.API_LOADING:
+      case API_LOADING:
         return {
           ...currentState,
           apiState: {
@@ -61,7 +76,7 @@ const useAppReducer: () => {
             isLoading: true,
           },
         };
-      case AppActionTypes.API_NO_LOADING:
+      case API_NO_LOADING:
         return {
           ...currentState,
           apiState: {
@@ -69,7 +84,7 @@ const useAppReducer: () => {
             isLoading: false,
           },
         };
-      case AppActionTypes.API_FETCH_SUCCESS:
+      case API_FETCH_SUCCESS:
         const fetchPayload: Characters = action.payload as Characters;
         return {
           ...currentState,
@@ -85,7 +100,7 @@ const useAppReducer: () => {
             },
           },
         };
-      case AppActionTypes.API_SELECT_CHARACTER:
+      case API_SELECT_CHARACTER:
         return {
           ...currentState,
           apiState: {
@@ -93,7 +108,7 @@ const useAppReducer: () => {
             selectedCharacter: action.payload as Character,
           },
         };
-      case AppActionTypes.API_RESET_CHARACTER:
+      case API_RESET_CHARACTER:
         return {
           ...currentState,
           apiState: {
@@ -101,7 +116,7 @@ const useAppReducer: () => {
             selectedCharacter: null,
           },
         };
-      case AppActionTypes.API_SET_SEARCHBAR_VALUE:
+      case API_SET_SEARCHBAR_VALUE:
         return {
           ...currentState,
           apiState: {
@@ -113,7 +128,7 @@ const useAppReducer: () => {
             },
           },
         };
-      case AppActionTypes.API_SET_SORTING_VALUE:
+      case API_SET_SORTING_VALUE:
         return {
           ...currentState,
           apiState: {
@@ -125,7 +140,7 @@ const useAppReducer: () => {
             },
           },
         };
-      case AppActionTypes.API_SET_PAGES:
+      case API_SET_PAGES:
         const PaginationPayload: number = action.payload as number;
 
         return {
@@ -140,7 +155,7 @@ const useAppReducer: () => {
             },
           },
         };
-      case AppActionTypes.API_FIRST_SET_PAGES:
+      case API_FIRST_SET_PAGES:
         return {
           ...currentState,
           apiState: {
@@ -155,7 +170,7 @@ const useAppReducer: () => {
             },
           },
         };
-      case AppActionTypes.API_SET_FORCE_PAGE:
+      case API_SET_FORCE_PAGE:
         return {
           ...currentState,
           apiState: {
@@ -166,34 +181,34 @@ const useAppReducer: () => {
             },
           },
         };
+      case API_SET_SEGMENT:
+        return {
+          ...currentState,
+          apiState: {
+            ...currentState.apiState,
+            pagination: {
+              ...currentState.apiState.pagination,
+              segment: action.payload as number,
+            },
+          },
+        };
+      case API_SET_PAGE:
+        return {
+          ...currentState,
+          apiState: {
+            ...currentState.apiState,
+            pagination: {
+              ...currentState.apiState.pagination,
+              apiPage: action.payload as number,
+            },
+          },
+        };
       default:
         return currentState;
     }
   };
 
   const [state, dispatchState] = useReducer(appReducer, INITIAL_STATE);
-
-  const addProposal = (proposal: Proposal) => {
-    dispatchState({
-      type: AppActionTypes.SET_PROPOSAL,
-      payload: [...state.proposals, { ...proposal, id: state.proposals.length }],
-    });
-  };
-
-  const filterComponentItems = (query: string) => {
-    dispatchState({
-      type: AppActionTypes.SET_COMPONENTS_VALUE,
-      payload: [
-        ...state.componentItems.filter(
-          (item: Item) => !query || item.model.toLowerCase().includes(query.toLowerCase())
-        ),
-      ],
-    });
-  };
-
-  const addApiSearchQuery = (searchQuery: string) => {
-    dispatchState({ type: AppActionTypes.API_SET_SEARCHBAR_VALUE, payload: searchQuery });
-  };
 
   const getCharacters = (url: string, segment?: number) => {
     const { count } = state.apiState.pagination;
@@ -212,7 +227,7 @@ const useAppReducer: () => {
 
           if (segment) {
             const { cardPerPage } = state.apiState.pagination;
-            const newResults: Characters[] = result.results.slice(
+            const newResults: Character[] = result.results.slice(
               segment * cardPerPage - cardPerPage,
               segment * cardPerPage
             );
@@ -231,22 +246,9 @@ const useAppReducer: () => {
       .catch((error) => error);
   };
 
-  const selectCharacter = (character: Character) => {
-    dispatchState({ type: AppActionTypes.API_SELECT_CHARACTER, payload: character });
-  };
-
-  const resetCharacter = () => {
-    dispatchState({ type: AppActionTypes.API_RESET_CHARACTER });
-  };
-
   return {
     state,
     dispatchState,
-    addProposal,
-    filterComponentItems,
-    addApiSearchQuery,
-    selectCharacter,
-    resetCharacter,
     getCharacters,
   };
 };

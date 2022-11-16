@@ -1,27 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Proposal } from '../../../models/Proposal.interface';
 
 import styles from './Form.module.scss';
 import { FieldError, useForm } from 'react-hook-form';
 import { AppActionTypes } from '../../../models/AppState.interface';
 import { Context } from '../../AppContext/Context';
-
-const useAlert = () => {
-  const [alert, setAlert] = useState(false);
-
-  const showAlert = () => {
-    setAlert(true);
-
-    setTimeout(() => {
-      setAlert(false);
-    }, 3000);
-  };
-
-  return { alert, showAlert };
-};
+import useAlert from './useAlert';
 
 const Form = () => {
-  const appContext = useContext(Context);
+  const {
+    dispatch,
+    state: { proposals, form },
+  } = useContext(Context);
   const { alert, showAlert } = useAlert();
 
   const {
@@ -55,9 +45,10 @@ const Form = () => {
   const onSubmit = (proposal: Proposal) => {
     const url: string =
       typeof proposal.image === 'string' ? proposal.image : URL.createObjectURL(proposal.image[0]);
-    appContext.addProposal({
-      ...proposal,
-      image: url,
+
+    dispatch({
+      type: AppActionTypes.SET_PROPOSAL,
+      payload: [...proposals, { ...proposal, image: url, id: proposals.length }],
     });
   };
 
@@ -79,7 +70,7 @@ const Form = () => {
       color,
       cleaningType,
       deliveryTerm,
-    } = appContext.state.form;
+    } = form;
 
     setValue('name', name);
     setValue('dateOfBirth', dateOfBirth);
@@ -94,9 +85,8 @@ const Form = () => {
 
   useEffect(() => {
     const subscription = watch((value) => {
-      console.log(value);
       if (value) {
-        appContext.dispatch({ type: AppActionTypes.SET_FORM_VALUE, payload: value as Proposal });
+        dispatch({ type: AppActionTypes.SET_FORM_VALUE, payload: value as Proposal });
       }
     });
     setValues();

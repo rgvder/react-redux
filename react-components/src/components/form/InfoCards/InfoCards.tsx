@@ -5,13 +5,15 @@ import { Proposal } from '../../../models/Proposal.interface';
 import { Context } from '../../AppContext/Context';
 
 export const InfoCards = () => {
-  const appContext = useContext(Context);
+  const {
+    state: { proposals },
+  } = useContext(Context);
 
   return (
     <section className={styles.infoCards}>
       <div>
-        {appContext.state.proposals &&
-          appContext.state.proposals.map((proposal: Proposal) => (
+        {proposals &&
+          proposals.map((proposal: Proposal) => (
             <InfoCard
               key={proposal.id}
               image={proposal.image}

@@ -2,7 +2,12 @@ import React, { useContext, useEffect } from 'react';
 import styles from './Catalog.module.scss';
 import Card from '../Card/Card';
 import { Character } from '../../../models/Character.interface';
-import { BASE_PATH, SEARCH_PATH, SORTING_PATH } from '../../../pages/Api/Api';
+import {
+  BASE_PATH,
+  PAGINATION_PATH,
+  SEARCH_PATH,
+  SORTING_PATH,
+} from '../../../models/ApiConstants';
 import Preloader from '../Preloader/Preloader';
 import { Context } from '../../AppContext/Context';
 import Sorting from '../Sorting/Sorting';
@@ -12,13 +17,23 @@ const Catalog = () => {
   const {
     getCharacters,
     state: {
-      apiState: { result, isLoading, isError, apiSearchQuery, sorting },
+      apiState: {
+        result,
+        isLoading,
+        isError,
+        apiSearchQuery,
+        sorting,
+        pagination: { segment, apiPage },
+      },
     },
   } = useContext(Context);
 
   useEffect(() => {
     getCharacters(
-      `${BASE_PATH}?${SEARCH_PATH}${apiSearchQuery}${sorting ? '&' + SORTING_PATH + sorting : ''}`
+      `${BASE_PATH}?${PAGINATION_PATH}${apiPage}&${SEARCH_PATH}${apiSearchQuery}${
+        sorting ? '&' + SORTING_PATH + sorting : ''
+      }`,
+      segment
     );
   }, [apiSearchQuery, sorting]);
 

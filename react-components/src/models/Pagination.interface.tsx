@@ -3,4 +3,6 @@ export interface Pagination {
   count: number;
   pages: number;
   forcePage: number;
+  segment: number;
+  apiPage: number;
 }

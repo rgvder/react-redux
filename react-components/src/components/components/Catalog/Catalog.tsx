@@ -4,11 +4,14 @@ import { Card } from '../Card/Card';
 import { Context } from '../../AppContext/Context';
 
 const Catalog = () => {
-  const appContext = useContext(Context);
+  const {
+    state: { componentItems },
+  } = useContext(Context);
+
   return (
     <section className={styles.catalog}>
-      {appContext.state.componentItems &&
-        appContext.state.componentItems.map((item) => (
+      {componentItems &&
+        componentItems.map((item) => (
           <Card
             key={item.id}
             image={item.image}
