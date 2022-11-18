@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import SearchBar from '../../components/components/SearchBar/SearchBar';
 import Catalog from '../../components/components/Catalog/Catalog';
-import { Context } from '../../components/AppContext/Context';
+import { useSelector } from 'react-redux';
+import { State } from '../../store/store';
 
 const Components = () => {
-  const {
-    state: { componentItems },
-  } = useContext(Context);
+  const componentItems = useSelector((state: State) => state.components.componentItems);
 
   return (
     <>
