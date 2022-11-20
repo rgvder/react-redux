@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styles from './Catalog.module.scss';
 import { Card } from '../Card/Card';
-import { Context } from '../../AppContext/Context';
+import { useSelector } from 'react-redux';
+import { State } from '../../../store/store';
 
 const Catalog = () => {
-  const {
-    state: { componentItems },
-  } = useContext(Context);
+  const componentItems = useSelector((state: State) => state.components.componentItems);
 
   return (
     <section className={styles.catalog}>

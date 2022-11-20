@@ -1,13 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styles from './InfoCards.module.scss';
 import { InfoCard } from '../InfoCard/InfoCard';
 import { Proposal } from '../../../models/Proposal.interface';
-import { Context } from '../../AppContext/Context';
+import { useSelector } from 'react-redux';
+import { State } from '../../../store/store';
 
 export const InfoCards = () => {
-  const {
-    state: { proposals },
-  } = useContext(Context);
+  const proposals = useSelector((state: State) => state.form.proposals);
 
   return (
     <section className={styles.infoCards}>

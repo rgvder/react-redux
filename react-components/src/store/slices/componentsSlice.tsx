@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import items from '../../assets/source/items.json';
-import { Item } from '../../models/Item.interface';
 
 const componentsSlice = createSlice({
   name: 'components',
@@ -9,11 +8,7 @@ const componentsSlice = createSlice({
   },
   reducers: {
     setComponents(state, action) {
-      items.filter(
-        (item: Item) =>
-          !action.payload.value ||
-          item.model.toLowerCase().includes(action.payload.value.toLowerCase())
-      );
+      state.componentItems = action.payload;
     },
   },
 });

@@ -1,17 +1,19 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Proposal } from '../../../models/Proposal.interface';
 
 import styles from './Form.module.scss';
 import { FieldError, useForm } from 'react-hook-form';
-import { AppActionTypes } from '../../../models/AppState';
-import { Context } from '../../AppContext/Context';
 import useAlert from './useAlert';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { setFormValue, setProposalValue } from '../../../store/slices/formSlice';
+import { State } from '../../../store/store';
 
 const Form = () => {
-  const {
-    dispatch,
-    state: { proposals, form },
-  } = useContext(Context);
+  const dispatch = useDispatch();
+  const proposals = useSelector((state: State) => state.form.proposals);
+  const form = useSelector((state: State) => state.form.form);
+
   const { alert, showAlert } = useAlert();
 
   const {
@@ -46,10 +48,7 @@ const Form = () => {
     const url: string =
       typeof proposal.image === 'string' ? proposal.image : URL.createObjectURL(proposal.image[0]);
 
-    dispatch({
-      type: AppActionTypes.SET_PROPOSAL,
-      payload: [...proposals, { ...proposal, image: url, id: proposals.length }],
-    });
+    dispatch(setProposalValue([...proposals, { ...proposal, image: url, id: proposals.length }]));
   };
 
   useEffect(() => {
@@ -86,7 +85,7 @@ const Form = () => {
   useEffect(() => {
     const subscription = watch((value) => {
       if (value) {
-        dispatch({ type: AppActionTypes.SET_FORM_VALUE, payload: value as Proposal });
+        dispatch(setFormValue(value));
       }
     });
     setValues();
