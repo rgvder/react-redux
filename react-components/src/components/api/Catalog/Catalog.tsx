@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styles from './Catalog.module.scss';
 import Card from '../Card/Card';
 import { Character } from '../../../models/Character.interface';
@@ -9,40 +9,40 @@ import {
   SORTING_PATH,
 } from '../../../models/ApiConstants';
 import Preloader from '../Preloader/Preloader';
-import { Context } from '../../AppContext/Context';
 import Sorting from '../Sorting/Sorting';
 import Pagination from '../Pagination/Pagination';
-import { AppActionTypes } from '../../../models/AppState';
+import { fetchApi, setInitialLoading, setSegment } from '../../../redux/slices/apiSlice';
+import { RootState } from '../../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 const Catalog = () => {
-  const {
-    dispatch,
-    getCharacters,
-    state: {
-      apiState: {
-        result,
-        isLoading,
-        isError,
-        apiSearchQuery,
-        sorting,
-        isInitialLoading,
-        pagination: { segment, apiPage },
-      },
-    },
-  } = useContext(Context);
+  const dispatch = useAppDispatch();
+  const { isInitialLoading, sorting, apiSearchQuery, isError, isLoading, result } = useAppSelector(
+    (state: RootState) => state.api
+  );
+  const { segment, apiPage } = useAppSelector((state: RootState) => state.api.pagination);
 
   useEffect(() => {
-    getCharacters(
-      `${BASE_PATH}?${PAGINATION_PATH}${isInitialLoading ? apiPage : ''}${
-        apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
-      }${sorting ? '&' + SORTING_PATH + sorting : ''}`,
-      isInitialLoading ? segment : 1
+    dispatch(
+      fetchApi(
+        `${BASE_PATH}?${PAGINATION_PATH}${isInitialLoading ? apiPage : ''}${
+          apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
+        }${sorting ? '&' + SORTING_PATH + sorting : ''}`
+      )
     );
 
-    dispatch({ type: AppActionTypes.API_SET_INITIAL_LOADING, payload: false });
+    dispatch(setSegment(isInitialLoading ? segment : 1));
+
+    // getCharacters(
+    //   `${BASE_PATH}?${PAGINATION_PATH}${isInitialLoading ? apiPage : ''}${
+    //     apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
+    //   }${sorting ? '&' + SORTING_PATH + sorting : ''}`,
+    //   isInitialLoading ? segment : 1
+    // );
+    dispatch(setInitialLoading(false));
 
     return () => {
-      dispatch({ type: AppActionTypes.API_SET_INITIAL_LOADING, payload: true });
+      dispatch(setInitialLoading(true));
     };
   }, [apiSearchQuery, sorting]);
 

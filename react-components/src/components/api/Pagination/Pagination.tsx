@@ -1,8 +1,7 @@
-import React, { ChangeEventHandler, useContext, useEffect } from 'react';
+import React, { ChangeEventHandler, useContext } from 'react';
 import styles from './Pagination.module.scss';
 import { Context } from '../../AppContext/Context';
 import ReactPaginate from 'react-paginate';
-import { AppActionTypes } from '../../../models/AppState';
 import {
   API_COUNT,
   BASE_PATH,
@@ -10,22 +9,47 @@ import {
   SEARCH_PATH,
   SORTING_PATH,
 } from '../../../models/ApiConstants';
+import { RootState } from '../../../redux/store';
+import {
+  fetchApi,
+  setApiPage,
+  setForcePage,
+  setPages,
+  setSegment,
+} from '../../../redux/slices/apiSlice';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 const Pagination = () => {
   const {
     getCharacters,
-    dispatch,
+    //dispatch,
     state: {
       apiState: {
-        sorting,
-        apiSearchQuery,
-        pagination: { pages, cardPerPage, forcePage },
+        //sorting,
+        //apiSearchQuery,
+        //pagination: { pages, cardPerPage, forcePage },
       },
     },
   } = useContext(Context);
+  const { apiSearchQuery, sorting } = useAppSelector((state: RootState) => state.api);
+  const { pages, cardPerPage, forcePage } = useAppSelector(
+    (state: RootState) => state.api.pagination
+  );
+
+  const dispatch = useAppDispatch();
 
   const changePageCount: ChangeEventHandler<HTMLSelectElement> = (event) => {
-    dispatch({ type: AppActionTypes.API_SET_PAGES, payload: +event.target.value });
+    dispatch(setPages(+event.target.value));
+
+    dispatch(
+      fetchApi(
+        `${BASE_PATH}?${PAGINATION_PATH}${
+          apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
+        }${sorting ? '&' + SORTING_PATH + sorting : ''}`
+      )
+    );
+
+    dispatch(setSegment(1));
 
     getCharacters(
       `${BASE_PATH}?${PAGINATION_PATH}${apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''}${
@@ -43,16 +67,24 @@ const Pagination = () => {
     const perPageRatio = API_COUNT / cardPerPage;
     const segment = pageNum % perPageRatio || perPageRatio;
 
-    getCharacters(
-      `${BASE_PATH}?${PAGINATION_PATH}${apiPage}${
-        apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
-      }${sorting ? '&' + SORTING_PATH + sorting : ''}`,
-      segment
+    // getCharacters(
+    //   `${BASE_PATH}?${PAGINATION_PATH}${apiPage}${
+    //     apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
+    //   }${sorting ? '&' + SORTING_PATH + sorting : ''}`,
+    //   segment
+    // );
+
+    dispatch(
+      fetchApi(
+        `${BASE_PATH}?${PAGINATION_PATH}${apiPage}${
+          apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
+        }${sorting ? '&' + SORTING_PATH + sorting : ''}`
+      )
     );
 
-    dispatch({ type: AppActionTypes.API_SET_FORCE_PAGE, payload: currentPage.selected });
-    dispatch({ type: AppActionTypes.API_SET_SEGMENT, payload: segment });
-    dispatch({ type: AppActionTypes.API_SET_PAGE, payload: apiPage });
+    dispatch(setForcePage(currentPage.selected));
+    dispatch(setSegment(segment));
+    dispatch(setApiPage(apiPage));
   };
 
   return (

@@ -1,13 +1,13 @@
 import { ChangeEventHandler, MouseEventHandler, useEffect, useState } from 'react';
 import items from '../../../assets/source/items.json';
 import { Item } from '../../../models/Item.interface';
-import { useDispatch } from 'react-redux';
-import { setComponents } from '../../../store/slices/componentsSlice';
+import { setComponents } from '../../../redux/slices/componentsSlice';
+import { useAppDispatch } from '../../../redux/hooks';
 
 const useSearchBar = (initialValue: string) => {
   const [value, setValue] = useState<string>(initialValue);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     const input = event?.target;

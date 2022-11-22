@@ -1,22 +1,14 @@
-import React, {
-  KeyboardEventHandler,
-  MouseEventHandler,
-  SyntheticEvent,
-  useContext,
-  useRef,
-} from 'react';
+import React, { KeyboardEventHandler, MouseEventHandler, SyntheticEvent, useRef } from 'react';
 import styles from './SearchBar.module.scss';
-import { Context } from '../../AppContext/Context';
-import { AppActionTypes } from '../../../models/AppState';
+import { RootState } from '../../../redux/store';
+import { setSearchBarValue } from '../../../redux/slices/apiSlice';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 const SearchBar = () => {
   const nameInput = useRef<HTMLInputElement>(null);
-  const {
-    dispatch,
-    state: {
-      apiState: { apiSearchQuery },
-    },
-  } = useContext(Context);
+
+  const dispatch = useAppDispatch();
+  const { apiSearchQuery } = useAppSelector((state: RootState) => state.api);
 
   if (apiSearchQuery && nameInput.current) {
     nameInput.current.value = apiSearchQuery;
@@ -28,10 +20,7 @@ const SearchBar = () => {
     event.preventDefault();
 
     if (event.nativeEvent.code === 'Enter') {
-      dispatch({
-        type: AppActionTypes.API_SET_SEARCHBAR_VALUE,
-        payload: nameInput?.current?.value,
-      });
+      dispatch(setSearchBarValue(nameInput?.current?.value || ''));
     }
   };
 
@@ -41,7 +30,7 @@ const SearchBar = () => {
     }
 
     nameInput.current.value = '';
-    dispatch({ type: AppActionTypes.API_SET_SEARCHBAR_VALUE, payload: '' });
+    dispatch(setSearchBarValue(''));
   };
 
   return (

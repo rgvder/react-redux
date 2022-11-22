@@ -1,22 +1,20 @@
-import React, { useContext, useRef } from 'react';
+import React, { useRef } from 'react';
 import styles from './Sorting.module.scss';
-import { Context } from '../../AppContext/Context';
 import { apiSorting } from '../../../models/ApiSorting.enum';
-import { AppActionTypes } from '../../../models/AppState';
+import { RootState } from '../../../redux/store';
+import { setSortingValue } from '../../../redux/slices/apiSlice';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 const Sorting = () => {
   const sortingFieldSet = useRef<HTMLFieldSetElement>(null);
-  const {
-    dispatch,
-    state: {
-      apiState: { sorting },
-    },
-  } = useContext(Context);
+
+  const dispatch = useAppDispatch();
+  const { sorting } = useAppSelector((state: RootState) => state.api);
 
   sortingFieldSet?.current?.elements?.namedItem(sorting)?.setAttribute('checked', 'checked');
 
   const handleClick = (sortingType: apiSorting) => {
-    dispatch({ type: AppActionTypes.API_SET_SORTING_VALUE, payload: sortingType });
+    dispatch(setSortingValue(sortingType));
   };
 
   return (

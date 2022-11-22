@@ -1,11 +1,11 @@
 import React from 'react';
 import styles from './Catalog.module.scss';
 import { Card } from '../Card/Card';
-import { useSelector } from 'react-redux';
-import { State } from '../../../store/store';
+import { RootState } from '../../../redux/store';
+import { useAppSelector } from '../../../redux/hooks';
 
 const Catalog = () => {
-  const componentItems = useSelector((state: State) => state.components.componentItems);
+  const componentItems = useAppSelector((state: RootState) => state.components.componentItems);
 
   return (
     <section className={styles.catalog}>

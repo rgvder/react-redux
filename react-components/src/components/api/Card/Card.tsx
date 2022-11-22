@@ -1,15 +1,15 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import styles from './Card.module.scss';
-import { Context } from '../../AppContext/Context';
 import { Link } from 'react-router-dom';
 import { ApiCardProps } from '../../../models/ApiCardProps.interface';
-import { AppActionTypes } from '../../../models/AppState';
+import { selectCharacter } from '../../../redux/slices/apiSlice';
+import { useAppDispatch } from '../../../redux/hooks';
 
 const Card: FC<ApiCardProps> = (props) => {
-  const { dispatch } = useContext(Context);
+  const dispatch = useAppDispatch();
 
   const handleClick = () => {
-    dispatch({ type: AppActionTypes.API_SELECT_CHARACTER, payload: props.character });
+    dispatch(selectCharacter(props.character));
   };
 
   return (

@@ -1,22 +1,19 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styles from './ApiInfoPage.module.scss';
-import { Context } from '../../AppContext/Context';
 import { useNavigate } from 'react-router-dom';
-import { AppActionTypes } from '../../../models/AppState';
+import { RootState } from '../../../redux/store';
+import { resetCharacter } from '../../../redux/slices/apiSlice';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 const ApiInfoPage = () => {
-  const {
-    dispatch,
-    state: {
-      apiState: { selectedCharacter },
-    },
-  } = useContext(Context);
+  const dispatch = useAppDispatch();
+  const { selectedCharacter } = useAppSelector((state: RootState) => state.api);
 
   const navigate = useNavigate();
 
   const handleClick = () => {
     navigate(-1);
-    dispatch({ type: AppActionTypes.API_RESET_CHARACTER });
+    dispatch(resetCharacter());
   };
 
   const episode: string[] | undefined = selectedCharacter?.episode.map((item: string) =>

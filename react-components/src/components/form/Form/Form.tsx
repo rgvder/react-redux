@@ -4,15 +4,15 @@ import { Proposal } from '../../../models/Proposal.interface';
 import styles from './Form.module.scss';
 import { FieldError, useForm } from 'react-hook-form';
 import useAlert from './useAlert';
-import { useDispatch, useSelector } from 'react-redux';
 
-import { setFormValue, setProposalValue } from '../../../store/slices/formSlice';
-import { State } from '../../../store/store';
+import { setFormValue, setProposalValue } from '../../../redux/slices/formSlice';
+import { RootState } from '../../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 const Form = () => {
-  const dispatch = useDispatch();
-  const proposals = useSelector((state: State) => state.form.proposals);
-  const form = useSelector((state: State) => state.form.form);
+  const dispatch = useAppDispatch();
+  const proposals = useAppSelector((state: RootState) => state.form.proposals);
+  const form = useAppSelector((state: RootState) => state.form.form);
 
   const { alert, showAlert } = useAlert();
 

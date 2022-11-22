@@ -12,5 +12,3 @@ export interface Proposal {
   submit?: boolean;
   id?: number;
 }
-
-export type ProposalsState = Proposal[];

@@ -2,11 +2,11 @@ import React from 'react';
 import styles from './InfoCards.module.scss';
 import { InfoCard } from '../InfoCard/InfoCard';
 import { Proposal } from '../../../models/Proposal.interface';
-import { useSelector } from 'react-redux';
-import { State } from '../../../store/store';
+import { RootState } from '../../../redux/store';
+import { useAppSelector } from '../../../redux/hooks';
 
 export const InfoCards = () => {
-  const proposals = useSelector((state: State) => state.form.proposals);
+  const proposals = useAppSelector((state: RootState) => state.form.proposals);
 
   return (
     <section className={styles.infoCards}>
