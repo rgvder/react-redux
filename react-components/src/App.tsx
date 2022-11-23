@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import React, { useContext } from 'react';
+import React from 'react';
 import './App.scss';
 
 import Layout from './components/Layout';
@@ -10,14 +10,11 @@ import { About } from './pages/About/About';
 import { NotFound } from './pages/NotFound/NotFound';
 import Components from './pages/Components/Components';
 import ApiInfoPage from './components/api/ApiInfoPage/ApiInfoPage';
-import { Context } from './components/AppContext/Context';
+import { useAppSelector } from './redux/hooks';
+import { RootState } from './redux/store';
 
 const App = () => {
-  const {
-    state: {
-      apiState: { selectedCharacter },
-    },
-  } = useContext(Context);
+  const { selectedCharacter } = useAppSelector((state: RootState) => state.api);
 
   return (
     <div className="App">

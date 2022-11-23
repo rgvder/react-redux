@@ -12,6 +12,7 @@ import {
 import { RootState } from '../../../redux/store';
 import {
   fetchApi,
+  FetchApiArgs,
   setApiPage,
   setForcePage,
   setPages,
@@ -20,17 +21,6 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 const Pagination = () => {
-  const {
-    getCharacters,
-    //dispatch,
-    state: {
-      apiState: {
-        //sorting,
-        //apiSearchQuery,
-        //pagination: { pages, cardPerPage, forcePage },
-      },
-    },
-  } = useContext(Context);
   const { apiSearchQuery, sorting } = useAppSelector((state: RootState) => state.api);
   const { pages, cardPerPage, forcePage } = useAppSelector(
     (state: RootState) => state.api.pagination
@@ -39,25 +29,26 @@ const Pagination = () => {
   const dispatch = useAppDispatch();
 
   const changePageCount: ChangeEventHandler<HTMLSelectElement> = (event) => {
+    const fetchApiArgs: FetchApiArgs = {
+      url: `${BASE_PATH}?${PAGINATION_PATH}${
+        apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
+      }${sorting ? '&' + SORTING_PATH + sorting : ''}`,
+      segment: 1,
+      characterPerPage: +event.target.value,
+    };
+
     dispatch(setPages(+event.target.value));
+    dispatch(fetchApi(fetchApiArgs));
 
-    dispatch(
-      fetchApi(
-        `${BASE_PATH}?${PAGINATION_PATH}${
-          apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
-        }${sorting ? '&' + SORTING_PATH + sorting : ''}`
-      )
-    );
+    //dispatch(setSegment(1));
 
-    dispatch(setSegment(1));
-
-    getCharacters(
-      `${BASE_PATH}?${PAGINATION_PATH}${apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''}${
-        sorting ? '&' + SORTING_PATH + sorting : ''
-      }`,
-      1,
-      +event.target.value
-    );
+    // getCharacters(
+    //   `${BASE_PATH}?${PAGINATION_PATH}${apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''}${
+    //     sorting ? '&' + SORTING_PATH + sorting : ''
+    //   }`,
+    //   1,
+    //   +event.target.value
+    // );
   };
 
   const handlePageChange = (currentPage: { selected: number }) => {
@@ -67,6 +58,14 @@ const Pagination = () => {
     const perPageRatio = API_COUNT / cardPerPage;
     const segment = pageNum % perPageRatio || perPageRatio;
 
+    const fetchApiArgs: FetchApiArgs = {
+      url: `${BASE_PATH}?${PAGINATION_PATH}${apiPage}${
+        apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
+      }${sorting ? '&' + SORTING_PATH + sorting : ''}`,
+      segment,
+      cardPerPage,
+    };
+
     // getCharacters(
     //   `${BASE_PATH}?${PAGINATION_PATH}${apiPage}${
     //     apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
@@ -74,17 +73,10 @@ const Pagination = () => {
     //   segment
     // );
 
-    dispatch(
-      fetchApi(
-        `${BASE_PATH}?${PAGINATION_PATH}${apiPage}${
-          apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
-        }${sorting ? '&' + SORTING_PATH + sorting : ''}`
-      )
-    );
-
     dispatch(setForcePage(currentPage.selected));
     dispatch(setSegment(segment));
     dispatch(setApiPage(apiPage));
+    dispatch(fetchApi(fetchApiArgs));
   };
 
   return (

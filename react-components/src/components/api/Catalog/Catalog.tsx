@@ -11,7 +11,12 @@ import {
 import Preloader from '../Preloader/Preloader';
 import Sorting from '../Sorting/Sorting';
 import Pagination from '../Pagination/Pagination';
-import { fetchApi, setInitialLoading, setSegment } from '../../../redux/slices/apiSlice';
+import {
+  fetchApi,
+  FetchApiArgs,
+  setInitialLoading,
+  setSegment,
+} from '../../../redux/slices/apiSlice';
 import { RootState } from '../../../redux/store';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
@@ -20,18 +25,22 @@ const Catalog = () => {
   const { isInitialLoading, sorting, apiSearchQuery, isError, isLoading, result } = useAppSelector(
     (state: RootState) => state.api
   );
-  const { segment, apiPage } = useAppSelector((state: RootState) => state.api.pagination);
+  const { segment, apiPage, cardPerPage } = useAppSelector(
+    (state: RootState) => state.api.pagination
+  );
 
   useEffect(() => {
-    dispatch(
-      fetchApi(
-        `${BASE_PATH}?${PAGINATION_PATH}${isInitialLoading ? apiPage : ''}${
-          apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
-        }${sorting ? '&' + SORTING_PATH + sorting : ''}`
-      )
-    );
+    const fetchApiArgs: FetchApiArgs = {
+      url: `${BASE_PATH}?${PAGINATION_PATH}${isInitialLoading ? apiPage : ''}${
+        apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
+      }${sorting ? '&' + SORTING_PATH + sorting : ''}`,
+      segment: isInitialLoading ? segment : 1,
+      cardPerPage,
+    };
 
-    dispatch(setSegment(isInitialLoading ? segment : 1));
+    dispatch(fetchApi(fetchApiArgs));
+
+    //dispatch(setSegment(isInitialLoading ? segment : 1));
 
     // getCharacters(
     //   `${BASE_PATH}?${PAGINATION_PATH}${isInitialLoading ? apiPage : ''}${

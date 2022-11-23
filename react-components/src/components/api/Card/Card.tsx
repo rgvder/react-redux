@@ -13,8 +13,8 @@ const Card: FC<ApiCardProps> = (props) => {
   };
 
   return (
-    <Link to={`${props.character.id ? props.character.id : '/api'}`}>
-      <article className={styles.card} onClick={handleClick} data-testid="card">
+    <Link to={`${props.character.id ? props.character.id : '/api'}`} onClick={handleClick}>
+      <article className={styles.card} data-testid="card">
         <div className={styles.image}>
           <img
             className={styles.avatar}

@@ -3,6 +3,10 @@ import { apiSorting } from '../../models/ApiSorting.enum';
 import { ApiState } from '../../models/ApiState.interface';
 import { Characters } from '../../models/Characters.interface';
 import { Character } from '../../models/Character.interface';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { AppActionTypes } from '../../models/AppState';
+import { RootState } from '../store';
+import { API_COUNT } from '../../models/ApiConstants';
 
 const initialState: ApiState = {
   isInitialLoading: true,
@@ -30,10 +34,37 @@ const initialState: ApiState = {
   isError: false,
 };
 
-export const fetchApi = createAsyncThunk('api/fetchApi', async (url: string) => {
-  const response = await fetch(url);
+export interface FetchApiArgs {
+  url: string;
+  segment?: number;
+  cardPerPage?: number;
+  characterPerPage?: number;
+}
 
-  return await response.json();
+export const fetchApi = createAsyncThunk('api/fetchApi', async (fetchApiArgs: FetchApiArgs) => {
+  console.log('fgb');
+  //const cardPerPage = useAppSelector((state: RootState) => state.api.pagination.cardPerPage);
+  //console.log(cardPerPage);
+  const cardPerCurrentPage = fetchApiArgs.characterPerPage
+    ? fetchApiArgs.characterPerPage
+    : fetchApiArgs.cardPerPage || API_COUNT;
+
+  const response = await fetch(fetchApiArgs.url);
+
+  return await response.json().then((result) => {
+    if (!result.error) {
+      if (fetchApiArgs.segment) {
+        const newResults: Character[] = result.results.slice(
+          fetchApiArgs.segment * cardPerCurrentPage - cardPerCurrentPage,
+          fetchApiArgs.segment * cardPerCurrentPage
+        );
+
+        return { ...result, results: newResults };
+      }
+    }
+
+    return result;
+  });
 });
 
 const apiSlice = createSlice({
@@ -109,31 +140,16 @@ const apiSlice = createSlice({
       .addCase(fetchApi.rejected, (state) => {
         state.isError = true;
       })
-      .addCase(fetchApi.fulfilled, (state, action, characterPerPage?: number) => {
-        const cardPerCurrentPage = characterPerPage
-          ? characterPerPage
-          : state.pagination.cardPerPage;
+      .addCase(fetchApi.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        if (!action.payload.error) {
-          if (!state.pagination.count) {
-            state.pagination.count = action.payload.info.count;
-            state.pagination.pages = Math.ceil(
-              action.payload.info.count / state.pagination.cardPerPage
-            );
-          }
-
-          if (state.pagination.segment) {
-            state.result.results = action.payload.results.slice(
-              state.pagination.segment * cardPerCurrentPage - cardPerCurrentPage,
-              state.pagination.segment * cardPerCurrentPage
-            );
-          } else {
-            state.result.results = action.payload;
-          }
-        } else {
-          state.isError = true;
+        if (!state.pagination.count) {
+          state.pagination.count = action.payload.info.count;
+          state.pagination.pages = Math.ceil(
+            action.payload.info.count / state.pagination.cardPerPage
+          );
         }
+        state.result = action.payload;
       });
   },
 });

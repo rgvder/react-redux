@@ -1,14 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './Header.module.scss';
-import { Context } from '../AppContext/Context';
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 
 const Header = () => {
-  const {
-    state: {
-      apiState: { selectedCharacter },
-    },
-  } = useContext(Context);
+  const { selectedCharacter } = useAppSelector((state: RootState) => state.api);
 
   return (
     <header className={styles.header}>
