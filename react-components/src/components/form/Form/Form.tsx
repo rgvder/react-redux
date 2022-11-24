@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Proposal } from '../../../models/Proposal.interface';
+import { Proposal } from '../../../models/form/Proposal.interface';
 
 import styles from './Form.module.scss';
 import { FieldError, useForm } from 'react-hook-form';
@@ -85,7 +85,7 @@ const Form = () => {
   useEffect(() => {
     const subscription = watch((value) => {
       if (value) {
-        dispatch(setFormValue(value));
+        dispatch(setFormValue(value as Proposal));
       }
     });
     setValues();

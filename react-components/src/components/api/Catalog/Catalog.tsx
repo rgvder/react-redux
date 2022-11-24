@@ -1,24 +1,20 @@
 import React, { useEffect } from 'react';
 import styles from './Catalog.module.scss';
 import Card from '../Card/Card';
-import { Character } from '../../../models/Character.interface';
+import { Character } from '../../../models/api/Character.interface';
 import {
   BASE_PATH,
   PAGINATION_PATH,
   SEARCH_PATH,
   SORTING_PATH,
-} from '../../../models/ApiConstants';
+} from '../../../models/api/ApiConstants';
 import Preloader from '../Preloader/Preloader';
 import Sorting from '../Sorting/Sorting';
 import Pagination from '../Pagination/Pagination';
-import {
-  fetchApi,
-  FetchApiArgs,
-  setInitialLoading,
-  setSegment,
-} from '../../../redux/slices/apiSlice';
+import { fetchApi, setInitialLoading } from '../../../redux/slices/apiSlice';
 import { RootState } from '../../../redux/store';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { FetchApiArgs } from '../../../models/api/FetchApiArgs.interface';
 
 const Catalog = () => {
   const dispatch = useAppDispatch();
@@ -39,15 +35,6 @@ const Catalog = () => {
     };
 
     dispatch(fetchApi(fetchApiArgs));
-
-    //dispatch(setSegment(isInitialLoading ? segment : 1));
-
-    // getCharacters(
-    //   `${BASE_PATH}?${PAGINATION_PATH}${isInitialLoading ? apiPage : ''}${
-    //     apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
-    //   }${sorting ? '&' + SORTING_PATH + sorting : ''}`,
-    //   isInitialLoading ? segment : 1
-    // );
     dispatch(setInitialLoading(false));
 
     return () => {

@@ -1,6 +1,5 @@
-import React, { ChangeEventHandler, useContext } from 'react';
+import React, { ChangeEventHandler } from 'react';
 import styles from './Pagination.module.scss';
-import { Context } from '../../AppContext/Context';
 import ReactPaginate from 'react-paginate';
 import {
   API_COUNT,
@@ -8,17 +7,17 @@ import {
   PAGINATION_PATH,
   SEARCH_PATH,
   SORTING_PATH,
-} from '../../../models/ApiConstants';
+} from '../../../models/api/ApiConstants';
 import { RootState } from '../../../redux/store';
 import {
   fetchApi,
-  FetchApiArgs,
   setApiPage,
   setForcePage,
   setPages,
   setSegment,
 } from '../../../redux/slices/apiSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { FetchApiArgs } from '../../../models/api/FetchApiArgs.interface';
 
 const Pagination = () => {
   const { apiSearchQuery, sorting } = useAppSelector((state: RootState) => state.api);
@@ -39,16 +38,6 @@ const Pagination = () => {
 
     dispatch(setPages(+event.target.value));
     dispatch(fetchApi(fetchApiArgs));
-
-    //dispatch(setSegment(1));
-
-    // getCharacters(
-    //   `${BASE_PATH}?${PAGINATION_PATH}${apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''}${
-    //     sorting ? '&' + SORTING_PATH + sorting : ''
-    //   }`,
-    //   1,
-    //   +event.target.value
-    // );
   };
 
   const handlePageChange = (currentPage: { selected: number }) => {
@@ -65,13 +54,6 @@ const Pagination = () => {
       segment,
       cardPerPage,
     };
-
-    // getCharacters(
-    //   `${BASE_PATH}?${PAGINATION_PATH}${apiPage}${
-    //     apiSearchQuery ? '&' + SEARCH_PATH + apiSearchQuery : ''
-    //   }${sorting ? '&' + SORTING_PATH + sorting : ''}`,
-    //   segment
-    // );
 
     dispatch(setForcePage(currentPage.selected));
     dispatch(setSegment(segment));

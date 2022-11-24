@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styles from './InfoCard.module.scss';
-import { Proposal } from '../../../models/Proposal.interface';
+import { Proposal } from '../../../models/form/Proposal.interface';
 
 export const InfoCard: FC<Proposal> = (props) => {
   return (

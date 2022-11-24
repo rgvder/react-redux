@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styles from './Card.module.scss';
 import { Link } from 'react-router-dom';
-import { ApiCardProps } from '../../../models/ApiCardProps.interface';
+import { ApiCardProps } from '../../../models/api/ApiCardProps.interface';
 import { selectCharacter } from '../../../redux/slices/apiSlice';
 import { useAppDispatch } from '../../../redux/hooks';
 

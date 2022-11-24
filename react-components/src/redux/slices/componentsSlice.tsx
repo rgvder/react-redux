@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import items from '../../assets/source/items.json';
-import { ComponentsState } from '../../models/ComponentsState.interface';
-import { Item } from '../../models/Item.interface';
+import { ComponentsState } from '../../models/components/ComponentsState.interface';
+import { Item } from '../../models/components/Item.interface';
 
 const initialState: ComponentsState = {
   componentItems: items,

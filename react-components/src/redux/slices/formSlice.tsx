@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FormState } from '../../models/FormState.interface';
-import { Proposal } from '../../models/Proposal.interface';
+import { FormState } from '../../models/form/FormState.interface';
+import { Proposal } from '../../models/form/Proposal.interface';
 
 const initialState: FormState = {
   proposals: [],

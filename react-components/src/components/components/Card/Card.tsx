@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styles from './Card.module.scss';
-import { Item } from '../../../models/Item.interface';
+import { Item } from '../../../models/components/Item.interface';
 import Rating from './Rating/Rating';
 import ButtonBasket from './ButtonBasket/ButtonBasket';
 import ButtonFavorite from './ButtonFavorite/ButtonFavorite';

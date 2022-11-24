@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import styles from './Sorting.module.scss';
-import { apiSorting } from '../../../models/ApiSorting.enum';
+import { apiSorting } from '../../../models/api/ApiSorting.enum';
 import { RootState } from '../../../redux/store';
 import { setSortingValue } from '../../../redux/slices/apiSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';

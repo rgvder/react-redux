@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './InfoCards.module.scss';
 import { InfoCard } from '../InfoCard/InfoCard';
-import { Proposal } from '../../../models/Proposal.interface';
+import { Proposal } from '../../../models/form/Proposal.interface';
 import { RootState } from '../../../redux/store';
 import { useAppSelector } from '../../../redux/hooks';
 

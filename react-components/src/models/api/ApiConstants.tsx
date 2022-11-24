@@ -3,3 +3,4 @@ export const SEARCH_PATH = 'name=';
 export const SORTING_PATH = 'status=';
 export const PAGINATION_PATH = 'page=';
 export const API_COUNT = 20;
+export const REPLACE_STRING = 'https://rickandmortyapi.com/api/episode/';

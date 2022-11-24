@@ -1,6 +1,6 @@
 import { ChangeEventHandler, MouseEventHandler, useEffect, useState } from 'react';
 import items from '../../../assets/source/items.json';
-import { Item } from '../../../models/Item.interface';
+import { Item } from '../../../models/components/Item.interface';
 import { setComponents } from '../../../redux/slices/componentsSlice';
 import { useAppDispatch } from '../../../redux/hooks';
 

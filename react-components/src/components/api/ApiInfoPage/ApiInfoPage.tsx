@@ -2,8 +2,9 @@ import React from 'react';
 import styles from './ApiInfoPage.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../../redux/store';
-import { resetCharacter } from '../../../redux/slices/apiSlice';
+import { selectCharacter } from '../../../redux/slices/apiSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { REPLACE_STRING } from '../../../models/api/ApiConstants';
 
 const ApiInfoPage = () => {
   const dispatch = useAppDispatch();
@@ -13,11 +14,11 @@ const ApiInfoPage = () => {
 
   const handleClick = () => {
     navigate(-1);
-    dispatch(resetCharacter());
+    dispatch(selectCharacter(null));
   };
 
   const episode: string[] | undefined = selectedCharacter?.episode.map((item: string) =>
-    item.replace('https://rickandmortyapi.com/api/episode/', '')
+    item.replace(REPLACE_STRING, '')
   );
 
   return (

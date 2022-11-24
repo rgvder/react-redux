@@ -3,17 +3,6 @@ import componentsReducer from './slices/componentsSlice';
 import formReducer from './slices/formSlice';
 import apiReducer from './slices/apiSlice';
 
-// export interface State {
-//   components: {
-//     componentItems: Item[];
-//   };
-//   form: {
-//     proposals: Proposal[];
-//     form: Proposal;
-//   };
-//   api: ApiState;
-// }
-
 const store = configureStore({
   reducer: {
     components: componentsReducer,
